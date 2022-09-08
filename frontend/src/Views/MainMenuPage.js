@@ -3,7 +3,7 @@ import "../Table.css";
 
 function MainMenuPage() {
   const username = JSON.parse(sessionStorage.getItem("token")).token.username;
-
+  console.log("booo");
   return (
     <>
       <div>
