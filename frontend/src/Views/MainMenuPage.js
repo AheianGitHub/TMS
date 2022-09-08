@@ -13,7 +13,7 @@ function MainMenuPage() {
       </div>
 
       {/* Main Menu temporary content */}
-      <div className="container">
+      {/* <div className="container">
         <div className="pt-5 text-white">
           <header className="py-5 mt-5">
             <p className="lead mb-0">
@@ -48,7 +48,7 @@ function MainMenuPage() {
         </a>
         <br></br>
         ============================================================================================================================================================================================
-      </p>
+      </p> */}
     </>
   );
 }
