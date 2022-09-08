@@ -1,0 +1,39 @@
+table,
+th,
+td {
+  border: 1px solid black;
+  padding: 5px;
+}
+table {
+  border-spacing: 15px;
+  background-color: #29818e;
+  color: rgb(255, 179, 1);
+}
+::placeholder {
+  color: rgb(19, 19, 19);
+}
+input[name="vanish"]::-webkit-input-placeholder {
+  -webkit-transition: opacity 0.3s linear;
+  color: gray;
+}
+input[name="vanish"]:focus::-webkit-input-placeholder {
+  opacity: 0;
+}
+.spaceBetweenButtons {
+  margin: 25px;
+  background-color: #479ebb; /* Blue */
+  border: none;
+  color: white;
+  padding: 10px 40px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+button {
+  cursor: pointer;
+}
+img.animated-gif {
+  width: 1000px;
+  height: auto;
+}

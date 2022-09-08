@@ -1,0 +1,32 @@
+.input {
+  background-color: #f3f9f5;
+  font-family: "Lexend Deca", sans-serif;
+  /* text-transform: uppercase; */
+  color: rgb(234, 54, 41);
+  padding: 20px;
+  width: 300px;
+  border-radius: 10px;
+}
+
+.body {
+  margin: auto;
+  width: 500px;
+  padding: 90px;
+  font-family: "Lexend Deca", sans-serif;
+}
+
+.wordsize {
+  font-size: 130%;
+  color: #fdfdfd;
+}
+
+.button {
+  background-color: #4caf50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 40px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
