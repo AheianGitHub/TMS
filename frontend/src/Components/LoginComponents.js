@@ -4,17 +4,20 @@ import "react-toastify/dist/ReactToastify.css";
 function LoginInputCheck(username, password) {
   // Missing username and password
   if (!username && !password) {
-    toast.error("Both fields are empty, please input username and password.", {
-      hideProgressBar: true
-    });
+    toast.warning(
+      "Both fields are empty, please input username and password.",
+      {
+        hideProgressBar: true
+      }
+    );
     return false;
   }
   if (!username && password) {
-    toast.error("Please input username", { hideProgressBar: true });
+    toast.warning("Please input username", { hideProgressBar: true });
     return false;
   }
   if (username && !password) {
-    toast.error("Please input password", { hideProgressBar: true });
+    toast.warning("Please input password", { hideProgressBar: true });
     return false;
   }
   return true;

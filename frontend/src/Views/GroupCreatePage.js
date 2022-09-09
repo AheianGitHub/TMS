@@ -12,9 +12,9 @@ function CreateGroup() {
   const handleSubmit = async e => {
     e.preventDefault();
 
-    if (!groupname || groupname.trim() == "") {
+    if (!groupname) {
       console.log(groupname);
-      toast.error("No group name set.", {
+      toast.warning("No group name set.", {
         hideProgressBar: true
       });
     } else {
@@ -26,7 +26,7 @@ function CreateGroup() {
         },
         // POST content
         body: JSON.stringify({
-          groupname: groupname.trim()
+          groupname: groupname
         })
       }).then(async res => {
         if (res.status === 200) {
@@ -69,7 +69,7 @@ function CreateGroup() {
                 <tr>
                   <td key="uniqueID1">
                     <input
-                      onChange={e => setGroupName(e.target.value)}
+                      onChange={e => setGroupName(e.target.value.trim())}
                       name="vanish"
                       type="text"
                       placeholder="Groupname Input"

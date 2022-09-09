@@ -37,15 +37,15 @@ function UserCreatePage() {
       return;
     }
 
-    if (!username || username.trim() == "") {
-      toast.error("No username set.", {
+    if (!username) {
+      toast.warning("No username set.", {
         hideProgressBar: true
       });
       return;
     }
 
     if (!password) {
-      toast.error("No password set.", {
+      toast.warning("No password set.", {
         hideProgressBar: true
       });
       return;
@@ -121,7 +121,7 @@ function UserCreatePage() {
                 <tr>
                   <td key="uniqueID1">
                     <input
-                      onChange={e => setUserName(e.target.value)}
+                      onChange={e => setUserName(e.target.value.trim())}
                       name="vanish"
                       type="text"
                       placeholder="Username Input"

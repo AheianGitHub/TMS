@@ -27,7 +27,7 @@ const CheckPasswordField = password => {
   }
 
   if (pw_error.length > 0) {
-    toast.error(
+    toast.warning(
       <>
         Please enter a valid password
         <br />
