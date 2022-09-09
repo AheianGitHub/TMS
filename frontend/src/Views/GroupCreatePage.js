@@ -12,7 +12,8 @@ function CreateGroup() {
   const handleSubmit = async e => {
     e.preventDefault();
 
-    if (!groupname) {
+    if (!groupname || groupname.trim() == "") {
+      console.log(groupname);
       toast.error("No group name set.", {
         hideProgressBar: true
       });
@@ -25,7 +26,7 @@ function CreateGroup() {
         },
         // POST content
         body: JSON.stringify({
-          groupname: groupname
+          groupname: groupname.trim()
         })
       }).then(async res => {
         if (res.status === 200) {

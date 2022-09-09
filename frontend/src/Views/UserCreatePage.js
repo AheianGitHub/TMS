@@ -37,7 +37,7 @@ function UserCreatePage() {
       return;
     }
 
-    if (!username) {
+    if (!username || username.trim() == "") {
       toast.error("No username set.", {
         hideProgressBar: true
       });
