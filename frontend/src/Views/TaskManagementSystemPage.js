@@ -1,3 +1,6 @@
+import { useState, useEffect } from "react";
+import GetAllApplications from "../Components/DisplayAllApplications";
+
 function TaskManagementSystemPage() {
   //Create 3 Applications in SQL
   //Display Applications in Task Management System Page(TMSP)
@@ -7,6 +10,12 @@ function TaskManagementSystemPage() {
   //-On return to TMSP, display newly created apps
   //Edit App page -> Edit app like editing users, update database
   //-Return to TMSP upon edit to reflect changes
+
+  const [groupTableData, setGroupTableData] = useState([]);
+
+  useEffect(() => {
+    GetAllApplications(setGroupTableData);
+  }, []);
 
   return (
     <>
@@ -27,6 +36,16 @@ function TaskManagementSystemPage() {
                 </th>
               </tr>
             </thead>
+
+            {/* <tbody>
+              {groupTableData.map(individualData => {
+                return (
+                  <tr key={individualData.groupname}>
+                    <td>{individualData.groupname}</td>
+                  </tr>
+                );
+              })}
+            </tbody> */}
 
             {/* <tbody>
               {dataHold.map(individualData => {

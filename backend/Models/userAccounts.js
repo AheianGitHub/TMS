@@ -253,6 +253,27 @@ async function userEdit(username, password, email, groupname, callback) {
   });
 }
 
+//===================================Get All Applications=============================================
+const getAllApplications = callback => {
+  // Query
+  let query = mysql.format(
+    "select App_Acronym, App_Description, App_Rnumber, App_startDate, App_endDate, App_permit_Open, App_permit_toDoList, App_permit_Doing, App_permit_Done, App_permit_Create from application"
+  );
+
+  // Querying
+  db.query(query, (error, result) => {
+    if (error) {
+      throw error;
+    } else {
+      if (result) {
+        callback(null, result);
+      } else if (!result) {
+        callback(null, false);
+      }
+    }
+  });
+};
+
 module.exports = {
   getOneUser,
   verifyUser,
@@ -263,5 +284,6 @@ module.exports = {
   getAllUsers,
   toggleStatus,
   createUser,
-  userEdit
+  userEdit,
+  getAllApplications
 };

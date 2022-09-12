@@ -8,6 +8,7 @@ var getUserData = require("../Controllers/getUserData");
 const profileEdit = require("../Controllers/profileEdit");
 const createGroup = require("../Controllers/createGroup");
 const getAllUsers = require("../Controllers/getAllUsers");
+const getAllApplications = require("../Controllers/getAllApplications");
 
 const userAccounts = require("../Models/userAccounts");
 const CreateUser = require("../Controllers/createUser");
@@ -30,5 +31,6 @@ routers.post("/GetAllUsers", getAllUsers.getAllUsers);
 routers.post("/ToggleStatus", userAccounts.toggleStatus);
 routers.post("/CreateUser", CreateUser.CreateUser);
 routers.post("/UserEdit", userEdit.userEdit);
+routers.post("/getAllApplications", getAllApplications.getAllApplications);
 
 module.exports = routers;
