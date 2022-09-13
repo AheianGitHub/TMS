@@ -3,14 +3,11 @@ import { toast } from "react-toastify";
 import CheckIcon from "@mui/icons-material/Check";
 import ToggleButton from "@mui/material/ToggleButton";
 import DisplayAllUsers from "../Components/DisplayAllUsers";
-import UserEditPage from "./UserEditPage";
 import "../Table.css";
 
 function UserManagementPage() {
-  const token = JSON.parse(sessionStorage.getItem("token")).token;
   const [dataHold, setDataHold] = useState([]);
 
-  const [selected, setSelected] = React.useState(false);
   const [statusRender, setStatusRender] = useState(false);
 
   useEffect(() => {
@@ -33,12 +30,12 @@ function UserManagementPage() {
     })
       .then(async res => await res.json())
       .then(json_res => {
-        if (json_res.result == true) {
-          if (status == true) {
+        if (json_res.result === true) {
+          if (status === true) {
             toast.success("User Status is now Active!", {
               hideProgressBar: true
             });
-          } else if (status == false) {
+          } else if (status === false) {
             toast.warn("User Status is now Inactive!", {
               hideProgressBar: true
             });
@@ -76,9 +73,8 @@ function UserManagementPage() {
                     <td key="uniqueID4">
                       <ToggleButton
                         value="check"
-                        selected={selected}
+                        selected={individualData.status}
                         onClick={() => {
-                          setSelected(!selected);
                           toggleStatus(
                             !individualData.status,
                             individualData.username
