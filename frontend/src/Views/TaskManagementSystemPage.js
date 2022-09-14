@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import GetAllApplications from "../Components/DisplayAllApplications";
+import "../Table.css";
 
 function TaskManagementSystemPage() {
   //Create 3 Applications in SQL
@@ -37,15 +38,47 @@ function TaskManagementSystemPage() {
               </tr>
             </thead>
 
-            {/* <tbody>
+            <tbody>
               {groupTableData.map(individualData => {
                 return (
-                  <tr key={individualData.groupname}>
-                    <td>{individualData.groupname}</td>
+                  <tr key={individualData.App_Acronym}>
+                    <td key="uniqueID1">{individualData.App_Acronym}</td>
+                    <td key="uniqueID2" className="tooltip">
+                      {individualData.App_Description}
+                      <span className="tooltiptext">
+                        Rnumber: {individualData.App_Rnumber}, <br></br>
+                        Start Date: {individualData.App_startDate}, <br></br>
+                        End Date: {individualData.App_endDate}, <br></br>
+                        App Permit Open: {individualData.App_permit_Open},{" "}
+                        <br></br>
+                        App Permit To-Do-List:{" "}
+                        {individualData.App_permit_toDoList}, <br></br>
+                        App Permit Doing: {
+                          individualData.App_permit_Doing
+                        }, <br></br>
+                        App Permit Done: {individualData.App_permit_Done},{" "}
+                        <br></br>
+                        App Permit Create: {individualData.App_permit_Create}
+                      </span>
+                    </td>
+                    <td>
+                      <a
+                        onClick={() => {
+                          sessionStorage.setItem(
+                            "ApplicationData",
+                            JSON.stringify(individualData)
+                          );
+                        }}
+                        href="/ApplicationEditPage"
+                        className="spaceBetweenButtons"
+                      >
+                        EDIT
+                      </a>
+                    </td>
                   </tr>
                 );
               })}
-            </tbody> */}
+            </tbody>
 
             {/* <tbody>
               {dataHold.map(individualData => {
