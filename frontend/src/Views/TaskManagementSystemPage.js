@@ -28,10 +28,7 @@ function TaskManagementSystemPage() {
                 <th>Application(s)</th>
                 <th>Brief Description of App</th>
                 <th>
-                  <a
-                    href="/ProjectLeadCreateApp"
-                    className="spaceBetweenButtons"
-                  >
+                  <a href="/CreateAppPage" className="spaceBetweenButtons">
                     Create App
                   </a>
                 </th>
@@ -47,6 +44,7 @@ function TaskManagementSystemPage() {
                       {individualData.App_Description}
                       <span className="tooltiptext">
                         Rnumber: {individualData.App_Rnumber}, <br></br>
+                        {/* Find a way to remove the time for the date value */}
                         Start Date: {individualData.App_startDate}, <br></br>
                         End Date: {individualData.App_endDate}, <br></br>
                         App Permit Open: {individualData.App_permit_Open},{" "}
@@ -79,49 +77,6 @@ function TaskManagementSystemPage() {
                 );
               })}
             </tbody>
-
-            {/* <tbody>
-              {dataHold.map(individualData => {
-                return (
-                  <tr key={individualData.username}>
-                    <td key="uniqueID1">{individualData.username}</td>
-                    <td key="uniqueID2">{individualData.email}</td>
-                    <td key="uniqueID3">{individualData.groupname}</td>
-                    <td key="uniqueID4">
-                      <ToggleButton
-                        value="check"
-                        selected={selected}
-                        onClick={() => {
-                          setSelected(!selected);
-                          toggleStatus(
-                            !individualData.status,
-                            individualData.username
-                          );
-                          setStatusRender(status => !status);
-                        }}
-                      >
-                        <CheckIcon />
-                      </ToggleButton>
-                      {individualData.status ? "Active" : "Inactive"}
-                    </td>
-                    <td>
-                      <a
-                        onClick={() => {
-                          sessionStorage.setItem(
-                            "UserData",
-                            JSON.stringify(individualData)
-                          );
-                        }}
-                        href="/UserEditPage"
-                        className="spaceBetweenButtons"
-                      >
-                        EDIT
-                      </a>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody> */}
           </table>
         </div>
       </div>

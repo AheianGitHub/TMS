@@ -15,6 +15,7 @@ import UserEditPage from "./Views/UserEditPage";
 import GroupManagementPage from "./Views/GroupManagementPage";
 import GroupCreatePage from "./Views/GroupCreatePage";
 import TaskManagementSystemPage from "./Views/TaskManagementSystemPage";
+import CreateAppPage from "./Views/CreateAppPage";
 import InvalidPage from "./Views/InvalidPage";
 import Header from "./Views/Header";
 import { ToastContainer } from "react-toastify";
@@ -57,6 +58,7 @@ export default function SiangCo() {
               path="/TaskManagementSystemPage"
               element={<TaskManagementSystemPage />}
             />
+            <Route path="/CreateAppPage" element={<CreateAppPage />} />
           </Routes>
         </BrowserRouter>
       </div>

@@ -274,6 +274,21 @@ const getAllApplications = callback => {
   });
 };
 
+//=======================================Create Application================================================
+
+const createApplication = (request, callback) => {
+  var Query = `INSERT INTO application (App_Acronym, App_Description, App_startDate, App_endDate, App_permit_Open, App_permit_toDoList, App_permit_Doing, App_permit_Done, App_permit_Create) VALUES ('${request.body.App_Acronym}', '${request.body.App_Description}', '${request.body.App_startDate}', '${request.body.App_endDate}', '${request.body.App_endDate}', '${request.body.App_endDate}', '${request.body.App_endDate}', '${request.body.App_endDate}', '${request.body.App_endDate}')`;
+
+  // SQL Query to usergroups Table for groupname
+  db.query(Query, (error, results) => {
+    if (error) {
+      callback(error);
+    } else {
+      callback(null);
+    }
+  });
+};
+
 module.exports = {
   getOneUser,
   verifyUser,
@@ -285,5 +300,6 @@ module.exports = {
   toggleStatus,
   createUser,
   userEdit,
-  getAllApplications
+  getAllApplications,
+  createApplication
 };
