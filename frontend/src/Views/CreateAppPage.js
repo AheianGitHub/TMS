@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Component } from "react";
 import "../Table.css";
 import { useNavigate } from "react-router-dom";
 import { Multiselect } from "multiselect-react-dropdown";
@@ -7,26 +7,61 @@ import { ToastContainer } from "react-toastify";
 
 import GetGroups from "../Components/GetGroups";
 import SplitMultiselect from "../Components/SplitMultiselect";
-import CheckEmailField from "../Components/CheckEmailField";
-import CheckPasswordField from "../Components/CheckPasswordField";
+import CreateApplication from "../Components/CreateApplication";
 
 function CreateAppPage() {
   // Set useNavigate as variable
   const navigate = useNavigate();
   //setUsername = use this to hold/set the values | username = will become the storer of value that is in set__
-  const [username, setUserName] = useState();
-  const [password, setPassword] = useState();
-  const [email, setEmail] = useState("");
+  const [appAcro, setAppAcro] = useState();
+  const [appDesc, setAppDesc] = useState();
+  const [appRNumber, setAppRNumber] = useState();
+  const [appStartDate, setAppStartDate] = useState();
+  const [appEndDate, setAppEndDate] = useState();
+  const [appPermitOpen, setAppPermitOpen] = useState([]);
+  const [appPermitToDoList, setAppPermitToDoList] = useState([]);
+  const [appPermitDoing, setAppPermitDoing] = useState([]);
+  const [appPermitDone, setAppPermitDone] = useState([]);
+  const [appPermitCreate, setAppPermitCreate] = useState([]);
+
   const [groupOptions, setGroupOptions] = useState([]);
-  const [selectedGroups, setSelectedGroups] = useState([]);
+  // const [selectedGroups, setSelectedGroups] = useState([]);
 
   useEffect(() => {
     GetGroups(setGroupOptions);
     navigate("/CreateAppPage");
   }, []);
 
-  // const handleSubmit = async e => {
-  //   e.preventDefault();
+  const handleSubmit = async e => {
+    e.preventDefault();
+
+    if (
+      await CreateApplication(
+        appAcro,
+        appDesc,
+        appRNumber,
+        appStartDate,
+        appEndDate,
+        appPermitOpen,
+        appPermitToDoList,
+        appPermitDoing,
+        appPermitDone,
+        appPermitCreate
+      )
+    ) {
+      toast.success("Application created successfully!", {
+        hideProgressBar: true
+      });
+
+      // the set stuff change, also, the createapp componen test if working, and edit accordingly
+
+      // e.target.reset();
+      // setUserName();
+      // setPassword();
+      // setEmail();
+      // setSelectedGroups();
+    }
+  };
 
   //   const splitted_group = SplitMultiselect(selectedGroups);
 
@@ -59,48 +94,6 @@ function CreateAppPage() {
   //   if (email && !CheckEmailField(email)) {
   //     return;
   //   }
-
-  //   // console.log("???");
-  //   // console.log(groupname);
-
-  //   return fetch("/CreateUser", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Accept: "application/json"
-  //     },
-  //     // POST content
-  //     body: JSON.stringify({
-  //       username: username,
-  //       password: password,
-  //       email: email,
-  //       groupname: splitted_group
-  //     })
-  //   }).then(async res => {
-  //     if (res.status === 200) {
-  //       toast.success("User created successfully!", { hideProgressBar: true });
-  //       e.target.reset();
-  //       setUserName();
-  //       setPassword();
-  //       setEmail();
-  //       setSelectedGroups();
-  //     } else {
-  //       // Unpack error message
-  //       const err_msg = await res.json();
-  //       // Duplicate error message
-  //       if (err_msg.duplicate === true) {
-  //         toast.error("Username is taken, please use another username.", {
-  //           hideProgressBar: true
-  //         });
-  //       }
-  //       // Not duplicate error message
-  //       else {
-  //         toast.error("Profile Update Failure..", {
-  //           hideProgressBar: true
-  //         });
-  //       }
-  //     }
-  //   });
   // };
 
   return (
@@ -113,6 +106,7 @@ function CreateAppPage() {
               <tr>
                 <th>App_Acronym</th>
                 <th>App_Description</th>
+                <th>App_Rnumber</th>
                 <th>App_startDate</th>
                 <th>App_endDate</th>
               </tr>
@@ -121,48 +115,43 @@ function CreateAppPage() {
               <tr>
                 <td key="uniqueID1">
                   <input
-                    onChange={e => setUserName(e.target.value.trim())}
+                    onChange={e => setAppAcro(e.target.value.trim())}
                     name="vanish"
                     type="text"
-                    placeholder="Username Input"
+                    placeholder="App Acronym"
                     autoComplete="off"
                   />
                 </td>
                 <td key="uniqueID2">
-                  <input
-                    onChange={e => setPassword(e.target.value)}
-                    name="vanish"
-                    type="text"
-                    size="256"
-                    placeholder="Password Input"
+                  <textarea
+                    onChange={e => setAppDesc(e.target.value)}
+                    placeholder="App Description"
                     autoComplete="off"
                   />
                 </td>
                 <td key="uniqueID3">
                   <input
-                    onChange={e => setEmail(e.target.value)}
+                    onChange={e => setAppRNumber(e.target.value.trim())}
                     name="vanish"
                     type="text"
-                    placeholder="Email Input"
+                    placeholder="App R Number"
                     autoComplete="off"
                   />
                 </td>
                 <td key="uniqueID4">
-                  <div>
-                    <Multiselect
-                      placeholder="Select Group(s)"
-                      displayValue="groupname"
-                      onRemove={selection => {
-                        setSelectedGroups(selection);
-                      }}
-                      onSelect={selection => {
-                        setSelectedGroups(selection);
-                      }}
-                      options={groupOptions}
-                      showCheckbox
-                      selectedValues={selectedGroups}
-                    />
-                  </div>
+                  <input
+                    onChange={e => console.log(e.target.value)}
+                    // onChange={e => setEmail(e.target.value)}
+                    type="date"
+                    autoComplete="off"
+                  />
+                </td>
+                <td key="uniqueID5">
+                  <input
+                    // onChange={e => setEmail(e.target.value)}
+                    type="date"
+                    autoComplete="off"
+                  />
                 </td>
               </tr>
             </tbody>
@@ -176,6 +165,94 @@ function CreateAppPage() {
                 <th>App_permit_Create</th>
               </tr>
             </thead>
+
+            <tbody>
+              <td key="uniqueID6">
+                <div>
+                  <Multiselect
+                    placeholder="Select Group(s)"
+                    displayValue="groupname"
+                    onRemove={selection => {
+                      setAppPermitOpen(selection);
+                    }}
+                    onSelect={selection => {
+                      setAppPermitOpen(selection);
+                    }}
+                    options={groupOptions}
+                    showCheckbox
+                    selectedValues={appPermitOpen}
+                  />
+                </div>
+              </td>
+              <td key="uniqueID7">
+                <div>
+                  <Multiselect
+                    placeholder="Select Group(s)"
+                    displayValue="groupname"
+                    onRemove={selection => {
+                      setAppPermitToDoList(selection);
+                    }}
+                    onSelect={selection => {
+                      setAppPermitToDoList(selection);
+                    }}
+                    options={groupOptions}
+                    showCheckbox
+                    selectedValues={appPermitToDoList}
+                  />
+                </div>
+              </td>
+              <td key="uniqueID8">
+                <div>
+                  <Multiselect
+                    placeholder="Select Group(s)"
+                    displayValue="groupname"
+                    onRemove={selection => {
+                      setAppPermitDoing(selection);
+                    }}
+                    onSelect={selection => {
+                      setAppPermitDoing(selection);
+                    }}
+                    options={groupOptions}
+                    showCheckbox
+                    selectedValues={appPermitDoing}
+                  />
+                </div>
+              </td>
+              <td key="uniqueID9">
+                <div>
+                  <Multiselect
+                    placeholder="Select Group(s)"
+                    displayValue="groupname"
+                    onRemove={selection => {
+                      setAppPermitDone(selection);
+                    }}
+                    onSelect={selection => {
+                      setAppPermitDone(selection);
+                    }}
+                    options={groupOptions}
+                    showCheckbox
+                    selectedValues={appPermitDone}
+                  />
+                </div>
+              </td>
+              <td key="uniqueID10">
+                <div>
+                  <Multiselect
+                    placeholder="Select Group(s)"
+                    displayValue="groupname"
+                    onRemove={selection => {
+                      setAppPermitCreate(selection);
+                    }}
+                    onSelect={selection => {
+                      setAppPermitCreate(selection);
+                    }}
+                    options={groupOptions}
+                    showCheckbox
+                    selectedValues={appPermitCreate}
+                  />
+                </div>
+              </td>
+            </tbody>
 
             <tbody>
               <tr>
