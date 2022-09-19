@@ -53,7 +53,7 @@ async function CreateApplication(
       }
       // Not duplicate error message
       else {
-        toast.error("Profile Update Failure..", {
+        toast.error("Failed to create app..", {
           hideProgressBar: true
         });
       }

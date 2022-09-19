@@ -56,7 +56,7 @@ function UserEditPage(individualData) {
       return;
     }
 
-    return fetch("/UserEdit", {
+    return fetch("/EditUser", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

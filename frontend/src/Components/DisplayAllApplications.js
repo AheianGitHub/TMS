@@ -1,5 +1,5 @@
 async function DisplayAllApplications(setDataHold) {
-  return fetch("/getAllApplications", {
+  return fetch("/GetAllApplications", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

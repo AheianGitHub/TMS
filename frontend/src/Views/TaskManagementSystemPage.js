@@ -67,7 +67,7 @@ function TaskManagementSystemPage() {
                             JSON.stringify(individualData)
                           );
                         }}
-                        href="/ApplicationEditPage"
+                        href="/AppEditPage"
                         className="spaceBetweenButtons"
                       >
                         EDIT

@@ -2,7 +2,7 @@ var bcrypt = require("./bcryptController");
 var User = require("../Models/userAccounts");
 
 //Create User - Controller
-exports.CreateUser = async (request, response) => {
+exports.createUser = async (request, response) => {
   const myPlaintextPassword = request.body.password;
 
   request.body.password = await bcrypt.hash_password(myPlaintextPassword);

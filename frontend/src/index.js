@@ -15,7 +15,8 @@ import UserEditPage from "./Views/UserEditPage";
 import GroupManagementPage from "./Views/GroupManagementPage";
 import GroupCreatePage from "./Views/GroupCreatePage";
 import TaskManagementSystemPage from "./Views/TaskManagementSystemPage";
-import CreateAppPage from "./Views/CreateAppPage";
+import AppCreatePage from "./Views/AppCreatePage";
+import AppEditPage from "./Views/AppEditPage";
 import InvalidPage from "./Views/InvalidPage";
 import Header from "./Views/Header";
 import { ToastContainer } from "react-toastify";
@@ -40,25 +41,30 @@ export default function SiangCo() {
         <BrowserRouter>
           <Routes>
             <Route index element={<MainMenuPage token={token} />} />
+            <Route path="*" element={<InvalidPage />} />
+
             <Route path="/ProfilePage" element={<ProfilePage />} />
             <Route path="/ProfileEditPage" element={<ProfileEditPage />} />
+
             <Route
               path="/UserManagementPage"
               element={<UserManagementPage />}
             />
             <Route path="/UserCreatePage" element={<UserCreatePage />} />
             <Route path="/UserEditPage" element={<UserEditPage />} />
-            <Route path="*" element={<InvalidPage />} />
+
             <Route
               path="/GroupManagementPage"
               element={<GroupManagementPage />}
             />
             <Route path="/GroupCreatePage" element={<GroupCreatePage />} />
+
             <Route
               path="/TaskManagementSystemPage"
               element={<TaskManagementSystemPage />}
             />
-            <Route path="/CreateAppPage" element={<CreateAppPage />} />
+            <Route path="/AppCreatePage" element={<AppCreatePage />} />
+            <Route path="/AppEditPage" element={<AppEditPage />} />
           </Routes>
         </BrowserRouter>
       </div>

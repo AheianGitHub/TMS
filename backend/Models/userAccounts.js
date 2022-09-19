@@ -72,7 +72,7 @@ const checkGroup = (username, groupname, callback) => {
 //=====================================View Profile=====================================================
 //==================================Edit User's Profile=================================================
 // Insert user
-async function profileEdit(username, password, email, callback) {
+async function editProfile(username, password, email, callback) {
   // String and variables if required
   var set_fields = [];
   var set_vars = [];
@@ -203,7 +203,7 @@ const createUser = (request, callback) => {
 
 //=======================================Edit Single User================================================
 
-async function userEdit(username, password, email, groupname, callback) {
+async function editUser(username, password, email, groupname, callback) {
   // String and variables if required
   var set_fields = [];
   var set_vars = [];
@@ -289,17 +289,98 @@ const createApplication = (request, callback) => {
   });
 };
 
+//=======================================Edit Application (non-functional)================================================
+
+async function editApplication(
+  App_Acronym,
+  App_Description,
+  App_startDate,
+  App_endDate,
+  App_permit_Open,
+  App_permit_toDoList,
+  App_permit_Doing,
+  App_permit_Done,
+  App_permit_Create,
+  callback
+) {
+  // String and variables if required
+  var set_fields = [];
+  var set_vars = [];
+
+  if (App_Description) {
+    set_fields.push("App_Description = ?");
+    set_vars.push(App_Description);
+  }
+  if (App_startDate) {
+    set_fields.push("App_startDate = ?");
+    set_vars.push(App_startDate);
+  }
+  // if (email === "") {
+  //   set_fields.push("email = ?");
+  //   set_vars.push(null);
+  // }
+  if (App_endDate) {
+    set_fields.push("App_endDate = ?");
+    set_vars.push(App_endDate);
+  }
+  // if (groupname === "") {
+  //   set_fields.push("groupname = ?");
+  //   set_vars.push(null);
+  // }
+  if (App_permit_Open) {
+    set_fields.push("App_permit_Open = ?");
+    set_vars.push(App_permit_Open);
+  }
+  if (App_permit_toDoList) {
+    set_fields.push("App_permit_toDoList = ?");
+    set_vars.push(App_permit_toDoList);
+  }
+
+  set_vars.push(App_Acronym);
+  set_vars.push(App_Description);
+  set_vars.push(App_startDate);
+  set_vars.push(App_endDate);
+  set_vars.push(App_permit_Open);
+  set_vars.push(App_permit_toDoList);
+  set_vars.push(App_permit_Doing);
+  set_vars.push(App_permit_Done);
+  set_vars.push(App_permit_Create);
+
+  // Return if there is nothing to update in the user table
+  if (set_fields.length === 0) {
+    return callback(null);
+  }
+
+  let query = mysql.format(
+    "UPDATE application SET " +
+      set_fields.toString() +
+      " WHERE App_Acronym = ?",
+    set_vars
+  );
+
+  db.query(query, err => {
+    // Error handling
+    if (err) {
+      console.log("Error encountered when trying to edit application.");
+      return callback(err, false);
+    }
+    console.log("Successfully edited application.");
+    return callback(null, true);
+  });
+}
+
 module.exports = {
   getOneUser,
   verifyUser,
   checkGroup,
-  profileEdit,
+  editProfile,
   getGroups,
   createGroup,
   getAllUsers,
   toggleStatus,
   createUser,
-  userEdit,
+  editUser,
   getAllApplications,
-  createApplication
+  createApplication,
+  editApplication
 };

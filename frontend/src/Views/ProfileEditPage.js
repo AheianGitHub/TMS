@@ -35,7 +35,7 @@ function ProfileEditPage() {
       return;
     }
 
-    return fetch("/ProfileEdit", {
+    return fetch("/EditProfile", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
