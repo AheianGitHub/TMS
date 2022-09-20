@@ -3,61 +3,110 @@ import "../Table.css";
 import { useNavigate } from "react-router-dom";
 import { Multiselect } from "multiselect-react-dropdown";
 import { toast } from "react-toastify";
-import { ToastContainer } from "react-toastify";
 
 import GetGroups from "../Components/GetGroups";
+import PreSelect from "../Components/PreSelect";
 import SplitMultiselect from "../Components/SplitMultiselect";
 import CreateApplication from "../Components/CreateApplication";
 
-//Non-functional
+function AppEditPage(individualData) {
+  let App_Acronym = JSON.parse(
+    sessionStorage.getItem("ApplicationData")
+  ).App_Acronym;
+  let App_Description = JSON.parse(
+    sessionStorage.getItem("ApplicationData")
+  ).App_Description;
+  let App_Rnumber = JSON.parse(
+    sessionStorage.getItem("ApplicationData")
+  ).App_Rnumber;
+  let App_startDate = JSON.parse(
+    sessionStorage.getItem("ApplicationData")
+  ).App_startDate;
+  let App_endDate = JSON.parse(
+    sessionStorage.getItem("ApplicationData")
+  ).App_endDate;
+  let App_permit_Create = JSON.parse(
+    sessionStorage.getItem("ApplicationData")
+  ).App_permit_Create;
+  let App_permit_Open = JSON.parse(
+    sessionStorage.getItem("ApplicationData")
+  ).App_permit_Open;
+  let App_permit_toDoList = JSON.parse(
+    sessionStorage.getItem("ApplicationData")
+  ).App_permit_toDoList;
+  let App_permit_Doing = JSON.parse(
+    sessionStorage.getItem("ApplicationData")
+  ).App_permit_Doing;
+  let App_permit_Done = JSON.parse(
+    sessionStorage.getItem("ApplicationData")
+  ).App_permit_Done;
 
-function AppEditPage() {
   // Set useNavigate as variable
   const navigate = useNavigate();
   //setUsername = use this to hold/set the values | username = will become the storer of value that is in set__
   const [appAcro, setAppAcro] = useState();
   const [appDesc, setAppDesc] = useState();
   const [appRNumber, setAppRNumber] = useState();
-  const [appStartDate, setAppStartDate] = useState();
-  const [appEndDate, setAppEndDate] = useState();
-  const [appPermitOpen, setAppPermitOpen] = useState([]);
-  const [appPermitToDoList, setAppPermitToDoList] = useState([]);
-  const [appPermitDoing, setAppPermitDoing] = useState([]);
-  const [appPermitDone, setAppPermitDone] = useState([]);
+  const [appStartDate, setAppStartDate] = useState(
+    new Date(App_startDate)
+      .toLocaleDateString("pt-br")
+      .split("/")
+      .reverse()
+      .join("-")
+  );
+  const [appEndDate, setAppEndDate] = useState(
+    new Date(App_endDate)
+      .toLocaleDateString("pt-br")
+      .split("/")
+      .reverse()
+      .join("-")
+  );
   const [appPermitCreate, setAppPermitCreate] = useState([]);
+  const [preSelectedCreate, setPreSelectedCreate] = useState([]);
+
+  const [appPermitOpen, setAppPermitOpen] = useState([]);
+  const [preSelectedOpen, setPreSelectedOpen] = useState([]);
+
+  const [appPermitToDoList, setAppPermitToDoList] = useState([]);
+  const [preSelectedToDoList, setPreSelectedToDoList] = useState([]);
+
+  const [appPermitDoing, setAppPermitDoing] = useState([]);
+  const [preSelectedDoing, setPreSelectedDoing] = useState([]);
+
+  const [appPermitDone, setAppPermitDone] = useState([]);
+  const [preSelectedDone, setPreSelectedDone] = useState([]);
 
   const [groupOptions, setGroupOptions] = useState([]);
-  // const [selectedGroups, setSelectedGroups] = useState([]);
 
   useEffect(() => {
     GetGroups(setGroupOptions);
-    navigate("/AppCreatePage");
+    navigate("/AppEditPage");
+  }, []);
+
+  useEffect(() => {
+    let existing_Create = PreSelect(App_permit_Create);
+    setPreSelectedCreate(existing_Create);
+    setAppPermitCreate(existing_Create);
+
+    let existing_Open = PreSelect(App_permit_Open);
+    setPreSelectedOpen(existing_Open);
+    setAppPermitOpen(existing_Open);
+
+    let existing_ToDoList = PreSelect(App_permit_toDoList);
+    setPreSelectedToDoList(existing_ToDoList);
+    setAppPermitToDoList(existing_ToDoList);
+
+    let existing_Doing = PreSelect(App_permit_Doing);
+    setPreSelectedDoing(existing_Doing);
+    setAppPermitDoing(existing_Doing);
+
+    let existing_Done = PreSelect(App_permit_Done);
+    setPreSelectedDone(existing_Done);
+    setAppPermitDone(existing_Done);
   }, []);
 
   const handleSubmit = async e => {
     e.preventDefault();
-
-    console.log(
-      appAcro,
-      +" ",
-      appDesc,
-      +" ",
-      appRNumber,
-      +" ",
-      appStartDate,
-      +" ",
-      appEndDate,
-      +" ",
-      appPermitOpen,
-      +" ",
-      appPermitToDoList,
-      +" ",
-      appPermitDoing,
-      +" ",
-      appPermitDone,
-      +" ",
-      appPermitCreate
-    );
 
     if (
       await CreateApplication(
@@ -137,36 +186,21 @@ function AppEditPage() {
               </thead>
               <tbody>
                 <tr>
-                  <td key="uniqueID1">
-                    <input
-                      onChange={e => setAppAcro(e.target.value.trim())}
-                      name="vanish"
-                      type="text"
-                      placeholder="App Acronym"
-                      autoComplete="off"
-                    />
-                  </td>
+                  <td key="uniqueID1">{App_Acronym}</td>
                   <td key="uniqueID2">
                     <textarea
                       onChange={e => setAppDesc(e.target.value)}
-                      placeholder="App Description"
+                      placeholder={App_Description}
                       autoComplete="off"
                     />
                   </td>
-                  <td key="uniqueID3">
-                    <input
-                      onChange={e => setAppRNumber(e.target.value.trim())}
-                      name="vanish"
-                      type="text"
-                      placeholder="App R Number"
-                      autoComplete="off"
-                    />
-                  </td>
+                  <td key="uniqueID3">{App_Rnumber}</td>
                   <td key="uniqueID4">
                     <input
-                      // onChange={e => console.log(e.target.value)}
                       onChange={e => setAppStartDate(e.target.value)}
                       type="date"
+                      value={appStartDate}
+                      // onfocus="(this.type='date')"
                       autoComplete="off"
                     />
                   </td>
@@ -174,6 +208,7 @@ function AppEditPage() {
                     <input
                       onChange={e => setAppEndDate(e.target.value)}
                       type="date"
+                      value={appEndDate}
                       autoComplete="off"
                     />
                   </td>
@@ -182,11 +217,11 @@ function AppEditPage() {
 
               <thead>
                 <tr>
+                  <th>App_permit_Create</th>
                   <th>App_permit_Open</th>
                   <th>App_permit_toDoList</th>
                   <th>App_permit_Doing</th>
                   <th>App_permit_Done</th>
-                  <th>App_permit_Create</th>
                 </tr>
               </thead>
 
@@ -195,85 +230,85 @@ function AppEditPage() {
                   <td key="uniqueID6">
                     <div>
                       <Multiselect
-                        placeholder="Select Group(s)"
+                        placeholder="Select Group"
                         displayValue="groupname"
                         onRemove={selection => {
-                          setAppPermitOpen(selection);
+                          setAppPermitCreate(selection);
                         }}
                         onSelect={selection => {
-                          setAppPermitOpen(selection);
+                          setAppPermitCreate(selection);
                         }}
                         options={groupOptions}
                         showCheckbox
-                        selectedValues={appPermitOpen}
+                        selectedValues={preSelectedCreate}
                       />
                     </div>
                   </td>
                   <td key="uniqueID7">
                     <div>
                       <Multiselect
-                        placeholder="Select Group(s)"
+                        placeholder="Select Group"
                         displayValue="groupname"
                         onRemove={selection => {
-                          setAppPermitToDoList(selection);
+                          setAppPermitOpen(selection);
                         }}
                         onSelect={selection => {
-                          setAppPermitToDoList(selection);
+                          setAppPermitOpen(selection);
                         }}
                         options={groupOptions}
                         showCheckbox
-                        selectedValues={appPermitToDoList}
+                        selectedValues={preSelectedOpen}
                       />
                     </div>
                   </td>
                   <td key="uniqueID8">
                     <div>
                       <Multiselect
-                        placeholder="Select Group(s)"
+                        placeholder="Select Group"
                         displayValue="groupname"
                         onRemove={selection => {
-                          setAppPermitDoing(selection);
+                          setAppPermitToDoList(selection);
                         }}
                         onSelect={selection => {
-                          setAppPermitDoing(selection);
+                          setAppPermitToDoList(selection);
                         }}
                         options={groupOptions}
                         showCheckbox
-                        selectedValues={appPermitDoing}
+                        selectedValues={preSelectedToDoList}
                       />
                     </div>
                   </td>
                   <td key="uniqueID9">
                     <div>
                       <Multiselect
-                        placeholder="Select Group(s)"
+                        placeholder="Select Group"
                         displayValue="groupname"
                         onRemove={selection => {
-                          setAppPermitDone(selection);
+                          setAppPermitDoing(selection);
                         }}
                         onSelect={selection => {
-                          setAppPermitDone(selection);
+                          setAppPermitDoing(selection);
                         }}
                         options={groupOptions}
                         showCheckbox
-                        selectedValues={appPermitDone}
+                        selectedValues={preSelectedDoing}
                       />
                     </div>
                   </td>
                   <td key="uniqueID10">
                     <div>
                       <Multiselect
-                        placeholder="Select Group(s)"
+                        placeholder="Select Group"
                         displayValue="groupname"
                         onRemove={selection => {
-                          setAppPermitCreate(selection);
+                          setAppPermitDone(selection);
                         }}
                         onSelect={selection => {
-                          setAppPermitCreate(selection);
+                          setAppPermitDone(selection);
                         }}
                         options={groupOptions}
                         showCheckbox
-                        selectedValues={appPermitCreate}
+                        selectedValues={preSelectedDone}
                       />
                     </div>
                   </td>

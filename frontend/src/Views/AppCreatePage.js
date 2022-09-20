@@ -1,12 +1,11 @@
 import React, { useState, useEffect, Component } from "react";
-import "../Table.css";
 import { useNavigate } from "react-router-dom";
 import { Multiselect } from "multiselect-react-dropdown";
 import { toast } from "react-toastify";
-import { ToastContainer } from "react-toastify";
 
-import GetGroups from "../Components/GetGroups";
+import "../Table.css";
 import SplitMultiselect from "../Components/SplitMultiselect";
+import GetGroups from "../Components/GetGroups";
 import CreateApplication from "../Components/CreateApplication";
 
 function AppCreatePage() {
@@ -18,11 +17,11 @@ function AppCreatePage() {
   const [appRNumber, setAppRNumber] = useState();
   const [appStartDate, setAppStartDate] = useState();
   const [appEndDate, setAppEndDate] = useState();
+  const [appPermitCreate, setAppPermitCreate] = useState([]);
   const [appPermitOpen, setAppPermitOpen] = useState([]);
   const [appPermitToDoList, setAppPermitToDoList] = useState([]);
   const [appPermitDoing, setAppPermitDoing] = useState([]);
   const [appPermitDone, setAppPermitDone] = useState([]);
-  const [appPermitCreate, setAppPermitCreate] = useState([]);
 
   const [groupOptions, setGroupOptions] = useState([]);
   // const [selectedGroups, setSelectedGroups] = useState([]);
@@ -35,28 +34,6 @@ function AppCreatePage() {
   const handleSubmit = async e => {
     e.preventDefault();
 
-    console.log(
-      appAcro,
-      +" ",
-      appDesc,
-      +" ",
-      appRNumber,
-      +" ",
-      appStartDate,
-      +" ",
-      appEndDate,
-      +" ",
-      appPermitOpen,
-      +" ",
-      appPermitToDoList,
-      +" ",
-      appPermitDoing,
-      +" ",
-      appPermitDone,
-      +" ",
-      appPermitCreate
-    );
-
     if (
       await CreateApplication(
         appAcro,
@@ -64,28 +41,30 @@ function AppCreatePage() {
         appRNumber,
         appStartDate,
         appEndDate,
+        SplitMultiselect(appPermitCreate),
         SplitMultiselect(appPermitOpen),
         SplitMultiselect(appPermitToDoList),
         SplitMultiselect(appPermitDoing),
-        SplitMultiselect(appPermitDone),
-        SplitMultiselect(appPermitCreate)
+        SplitMultiselect(appPermitDone)
       )
     ) {
       toast.success("Application created successfully!", {
         hideProgressBar: true
       });
 
-      // the set stuff change, also, the createapp componen test if working, and edit accordingly
-
-      // e.target.reset();
-      // setUserName();
-      // setPassword();
-      // setEmail();
-      // setSelectedGroups();
+      e.target.reset();
+      setAppAcro();
+      setAppDesc();
+      setAppRNumber();
+      setAppStartDate();
+      setAppEndDate();
+      setAppPermitCreate();
+      setAppPermitOpen();
+      setAppPermitToDoList();
+      setAppPermitDoing();
+      setAppPermitDone();
     }
   };
-
-  //   const splitted_group = SplitMultiselect(selectedGroups);
 
   //   if (!username && !password && !email && !selectedGroups) {
   //     toast.error("None of the fields have an input.", {
@@ -155,7 +134,7 @@ function AppCreatePage() {
                     <input
                       onChange={e => setAppRNumber(e.target.value.trim())}
                       name="vanish"
-                      type="text"
+                      type="number"
                       placeholder="App R Number"
                       autoComplete="off"
                     />
@@ -180,11 +159,11 @@ function AppCreatePage() {
 
               <thead>
                 <tr>
+                  <th>App_permit_Create</th>
                   <th>App_permit_Open</th>
                   <th>App_permit_toDoList</th>
                   <th>App_permit_Doing</th>
                   <th>App_permit_Done</th>
-                  <th>App_permit_Create</th>
                 </tr>
               </thead>
 
@@ -193,75 +172,7 @@ function AppCreatePage() {
                   <td key="uniqueID6">
                     <div>
                       <Multiselect
-                        placeholder="Select Group(s)"
-                        displayValue="groupname"
-                        onRemove={selection => {
-                          setAppPermitOpen(selection);
-                        }}
-                        onSelect={selection => {
-                          setAppPermitOpen(selection);
-                        }}
-                        options={groupOptions}
-                        showCheckbox
-                        selectedValues={appPermitOpen}
-                      />
-                    </div>
-                  </td>
-                  <td key="uniqueID7">
-                    <div>
-                      <Multiselect
-                        placeholder="Select Group(s)"
-                        displayValue="groupname"
-                        onRemove={selection => {
-                          setAppPermitToDoList(selection);
-                        }}
-                        onSelect={selection => {
-                          setAppPermitToDoList(selection);
-                        }}
-                        options={groupOptions}
-                        showCheckbox
-                        selectedValues={appPermitToDoList}
-                      />
-                    </div>
-                  </td>
-                  <td key="uniqueID8">
-                    <div>
-                      <Multiselect
-                        placeholder="Select Group(s)"
-                        displayValue="groupname"
-                        onRemove={selection => {
-                          setAppPermitDoing(selection);
-                        }}
-                        onSelect={selection => {
-                          setAppPermitDoing(selection);
-                        }}
-                        options={groupOptions}
-                        showCheckbox
-                        selectedValues={appPermitDoing}
-                      />
-                    </div>
-                  </td>
-                  <td key="uniqueID9">
-                    <div>
-                      <Multiselect
-                        placeholder="Select Group(s)"
-                        displayValue="groupname"
-                        onRemove={selection => {
-                          setAppPermitDone(selection);
-                        }}
-                        onSelect={selection => {
-                          setAppPermitDone(selection);
-                        }}
-                        options={groupOptions}
-                        showCheckbox
-                        selectedValues={appPermitDone}
-                      />
-                    </div>
-                  </td>
-                  <td key="uniqueID10">
-                    <div>
-                      <Multiselect
-                        placeholder="Select Group(s)"
+                        placeholder="Select Group"
                         displayValue="groupname"
                         onRemove={selection => {
                           setAppPermitCreate(selection);
@@ -272,6 +183,80 @@ function AppCreatePage() {
                         options={groupOptions}
                         showCheckbox
                         selectedValues={appPermitCreate}
+                        selectionLimit={1}
+                      />
+                    </div>
+                  </td>
+
+                  <td key="uniqueID7">
+                    <div>
+                      <Multiselect
+                        placeholder="Select Group"
+                        displayValue="groupname"
+                        onRemove={selection => {
+                          setAppPermitOpen(selection);
+                        }}
+                        onSelect={selection => {
+                          setAppPermitOpen(selection);
+                        }}
+                        options={groupOptions}
+                        showCheckbox
+                        selectedValues={appPermitOpen}
+                        selectionLimit={1}
+                      />
+                    </div>
+                  </td>
+                  <td key="uniqueID8">
+                    <div>
+                      <Multiselect
+                        placeholder="Select Group"
+                        displayValue="groupname"
+                        onRemove={selection => {
+                          setAppPermitToDoList(selection);
+                        }}
+                        onSelect={selection => {
+                          setAppPermitToDoList(selection);
+                        }}
+                        options={groupOptions}
+                        showCheckbox
+                        selectedValues={appPermitToDoList}
+                        selectionLimit={1}
+                      />
+                    </div>
+                  </td>
+                  <td key="uniqueID9">
+                    <div>
+                      <Multiselect
+                        placeholder="Select Group"
+                        displayValue="groupname"
+                        onRemove={selection => {
+                          setAppPermitDoing(selection);
+                        }}
+                        onSelect={selection => {
+                          setAppPermitDoing(selection);
+                        }}
+                        options={groupOptions}
+                        showCheckbox
+                        selectedValues={appPermitDoing}
+                        selectionLimit={1}
+                      />
+                    </div>
+                  </td>
+                  <td key="uniqueID10">
+                    <div>
+                      <Multiselect
+                        placeholder="Select Group"
+                        displayValue="groupname"
+                        onRemove={selection => {
+                          setAppPermitDone(selection);
+                        }}
+                        onSelect={selection => {
+                          setAppPermitDone(selection);
+                        }}
+                        options={groupOptions}
+                        showCheckbox
+                        selectedValues={appPermitDone}
+                        selectionLimit={1}
                       />
                     </div>
                   </td>

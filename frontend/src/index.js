@@ -6,19 +6,25 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 // Custom Modules Import
 import UserToken from "./Components/UserToken";
 import LoginPage from "./Views/LoginPage";
+import InvalidPage from "./Views/InvalidPage";
+import Header from "./Views/Header";
 import MainMenuPage from "./Views/MainMenuPage";
+
 import ProfilePage from "./Views/ProfilePage";
 import ProfileEditPage from "./Views/ProfileEditPage";
+
 import UserManagementPage from "./Views/UserManagementPage";
 import UserCreatePage from "./Views/UserCreatePage";
 import UserEditPage from "./Views/UserEditPage";
+
 import GroupManagementPage from "./Views/GroupManagementPage";
 import GroupCreatePage from "./Views/GroupCreatePage";
+
 import TaskManagementSystemPage from "./Views/TaskManagementSystemPage";
 import AppCreatePage from "./Views/AppCreatePage";
 import AppEditPage from "./Views/AppEditPage";
-import InvalidPage from "./Views/InvalidPage";
-import Header from "./Views/Header";
+import KanbanDisplay from "./Views/KanbanDisplay";
+
 import { ToastContainer } from "react-toastify";
 
 export default function SiangCo() {
@@ -65,6 +71,7 @@ export default function SiangCo() {
             />
             <Route path="/AppCreatePage" element={<AppCreatePage />} />
             <Route path="/AppEditPage" element={<AppEditPage />} />
+            <Route path="/KanbanDisplay" element={<KanbanDisplay />} />
           </Routes>
         </BrowserRouter>
       </div>

@@ -28,7 +28,7 @@ function TaskManagementSystemPage() {
                 <th>Application(s)</th>
                 <th>Brief Description of App</th>
                 <th>
-                  <a href="/CreateAppPage" className="spaceBetweenButtons">
+                  <a href="/AppCreatePage" className="spaceBetweenButtons">
                     Create App
                   </a>
                 </th>
@@ -39,9 +39,24 @@ function TaskManagementSystemPage() {
               {groupTableData.map(individualData => {
                 return (
                   <tr key={individualData.App_Acronym}>
-                    <td key="uniqueID1">{individualData.App_Acronym}</td>
+                    <td key="uniqueID1">
+                      <a
+                        // onClick={() => {
+                        //   sessionStorage.setItem(
+                        //     "ApplicationData",
+                        //     JSON.stringify(individualData)
+                        //   );
+                        // }}
+                        href="/KanbanDisplay"
+                        className="spaceBetweenButtons"
+                      >
+                        {individualData.App_Acronym}
+                      </a>
+                    </td>
                     <td key="uniqueID2" className="tooltip">
-                      {individualData.App_Description}
+                      {individualData.App_Description !== "undefined"
+                        ? individualData.App_Description
+                        : "App has no description"}
                       <span className="tooltiptext">
                         Rnumber: {individualData.App_Rnumber}, <br></br>
                         {/* Find a way to remove the time for the date value */}

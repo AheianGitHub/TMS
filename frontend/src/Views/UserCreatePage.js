@@ -3,7 +3,6 @@ import "../Table.css";
 import { useNavigate } from "react-router-dom";
 import { Multiselect } from "multiselect-react-dropdown";
 import { toast } from "react-toastify";
-import { ToastContainer } from "react-toastify";
 
 import GetGroups from "../Components/GetGroups";
 import SplitMultiselect from "../Components/SplitMultiselect";
@@ -59,9 +58,6 @@ function UserCreatePage() {
     if (email && !CheckEmailField(email)) {
       return;
     }
-
-    // console.log("???");
-    // console.log(groupname);
 
     return fetch("/CreateUser", {
       method: "POST",
