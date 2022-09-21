@@ -19,6 +19,9 @@ const getAllApplications = require("../Controllers/getAllApplications");
 const createApplication = require("../Controllers/createApplication");
 const editApplication = require("../Controllers/editApplication");
 
+const createPlan = require("../Controllers/createPlan");
+// const editPlan = require("../Controllers/editPlan");
+
 //===================================================================================================
 routers.use((req, res, next) => {
   res.locals.currentUser = req.user;
@@ -43,5 +46,8 @@ routers.post("/EditUser", editUser.editUser);
 routers.post("/GetAllApplications", getAllApplications.getAllApplications);
 routers.post("/CreateApplication", createApplication.createApplication);
 routers.post("/EditApplication", editApplication.editApplication);
+
+routers.post("/CreatePlan", createPlan.createPlan);
+// routers.post("/EditPlan", editPlan.editPlan);
 
 module.exports = routers;

@@ -66,37 +66,6 @@ function AppCreatePage() {
     }
   };
 
-  //   if (!username && !password && !email && !selectedGroups) {
-  //     toast.error("None of the fields have an input.", {
-  //       hideProgressBar: true
-  //     });
-  //     return;
-  //   }
-
-  //   if (!username) {
-  //     toast.warning("No username set.", {
-  //       hideProgressBar: true
-  //     });
-  //     return;
-  //   }
-
-  //   if (!password) {
-  //     toast.warning("No password set.", {
-  //       hideProgressBar: true
-  //     });
-  //     return;
-  //   }
-
-  //   // Missing inputs
-  //   if (password && !CheckPasswordField(password)) {
-  //     return;
-  //   }
-
-  //   if (email && !CheckEmailField(email)) {
-  //     return;
-  //   }
-  // };
-
   return (
     <>
       <div className="container">

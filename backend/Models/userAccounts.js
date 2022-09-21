@@ -289,18 +289,18 @@ const createApplication = (request, callback) => {
   });
 };
 
-//=======================================Edit Application (non-functional)================================================
+//=======================================Edit Application================================================
 
 async function editApplication(
   App_Acronym,
   App_Description,
   App_startDate,
   App_endDate,
+  App_permit_Create,
   App_permit_Open,
   App_permit_toDoList,
   App_permit_Doing,
   App_permit_Done,
-  App_permit_Create,
   callback
 ) {
   // String and variables if required
@@ -315,18 +315,14 @@ async function editApplication(
     set_fields.push("App_startDate = ?");
     set_vars.push(App_startDate);
   }
-  // if (email === "") {
-  //   set_fields.push("email = ?");
-  //   set_vars.push(null);
-  // }
   if (App_endDate) {
     set_fields.push("App_endDate = ?");
     set_vars.push(App_endDate);
   }
-  // if (groupname === "") {
-  //   set_fields.push("groupname = ?");
-  //   set_vars.push(null);
-  // }
+  if (App_permit_Create) {
+    set_fields.push("App_permit_Create = ?");
+    set_vars.push(App_permit_Create);
+  }
   if (App_permit_Open) {
     set_fields.push("App_permit_Open = ?");
     set_vars.push(App_permit_Open);
@@ -335,16 +331,16 @@ async function editApplication(
     set_fields.push("App_permit_toDoList = ?");
     set_vars.push(App_permit_toDoList);
   }
+  if (App_permit_Doing) {
+    set_fields.push("App_permit_Doing = ?");
+    set_vars.push(App_permit_Doing);
+  }
+  if (App_permit_Done) {
+    set_fields.push("App_permit_Done = ?");
+    set_vars.push(App_permit_Done);
+  }
 
   set_vars.push(App_Acronym);
-  set_vars.push(App_Description);
-  set_vars.push(App_startDate);
-  set_vars.push(App_endDate);
-  set_vars.push(App_permit_Open);
-  set_vars.push(App_permit_toDoList);
-  set_vars.push(App_permit_Doing);
-  set_vars.push(App_permit_Done);
-  set_vars.push(App_permit_Create);
 
   // Return if there is nothing to update in the user table
   if (set_fields.length === 0) {
@@ -364,10 +360,25 @@ async function editApplication(
       console.log("Error encountered when trying to edit application.");
       return callback(err, false);
     }
-    console.log("Successfully edited application.");
+    console.log("Successfully edited application!");
     return callback(null, true);
   });
 }
+
+//==============================================Create Plan======================================================
+
+const createPlan = (request, callback) => {
+  var Query = `INSERT INTO plan (Plan_MVP_name, Plan_startDate, Plan_endDate, Plan_app_Acronym) VALUES ('${request.body.Plan_MVP_name}', '${request.body.Plan_startDate}', '${request.body.Plan_endDate}', '${request.body.Plan_app_Acronym}')`;
+
+  // SQL Query to usergroups Table for groupname
+  db.query(Query, (error, results) => {
+    if (error) {
+      callback(error);
+    } else {
+      callback(null);
+    }
+  });
+};
 
 module.exports = {
   getOneUser,
@@ -382,5 +393,6 @@ module.exports = {
   editUser,
   getAllApplications,
   createApplication,
-  editApplication
+  editApplication,
+  createPlan
 };

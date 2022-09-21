@@ -41,12 +41,12 @@ function TaskManagementSystemPage() {
                   <tr key={individualData.App_Acronym}>
                     <td key="uniqueID1">
                       <a
-                        // onClick={() => {
-                        //   sessionStorage.setItem(
-                        //     "ApplicationData",
-                        //     JSON.stringify(individualData)
-                        //   );
-                        // }}
+                        onClick={() => {
+                          sessionStorage.setItem(
+                            "ApplicationData",
+                            JSON.stringify(individualData)
+                          );
+                        }}
                         href="/KanbanDisplay"
                         className="spaceBetweenButtons"
                       >

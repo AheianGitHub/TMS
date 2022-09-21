@@ -7,7 +7,6 @@ import { toast } from "react-toastify";
 import GetGroups from "../Components/GetGroups";
 import PreSelect from "../Components/PreSelect";
 import SplitMultiselect from "../Components/SplitMultiselect";
-import CreateApplication from "../Components/CreateApplication";
 
 function AppEditPage(individualData) {
   let App_Acronym = JSON.parse(
@@ -44,9 +43,7 @@ function AppEditPage(individualData) {
   // Set useNavigate as variable
   const navigate = useNavigate();
   //setUsername = use this to hold/set the values | username = will become the storer of value that is in set__
-  const [appAcro, setAppAcro] = useState();
-  const [appDesc, setAppDesc] = useState();
-  const [appRNumber, setAppRNumber] = useState();
+  const [appDesc, setAppDesc] = useState(App_Description);
   const [appStartDate, setAppStartDate] = useState(
     new Date(App_startDate)
       .toLocaleDateString("pt-br")
@@ -108,66 +105,138 @@ function AppEditPage(individualData) {
   const handleSubmit = async e => {
     e.preventDefault();
 
+    console.log(App_Description, "vs", appDesc);
+    console.log(
+      new Date(App_startDate)
+        .toLocaleDateString("pt-br")
+        .split("/")
+        .reverse()
+        .join("-"),
+      " vs ",
+      appStartDate
+    );
+    console.log(
+      new Date(App_endDate)
+        .toLocaleDateString("pt-br")
+        .split("/")
+        .reverse()
+        .join("-"),
+      " vs ",
+      appEndDate
+    );
+    console.log(App_permit_Create, " vs ", SplitMultiselect(appPermitCreate));
+    console.log(App_permit_Open, " vs ", SplitMultiselect(appPermitOpen));
+    console.log(
+      App_permit_toDoList,
+      " vs ",
+      SplitMultiselect(appPermitToDoList)
+    );
+    console.log(App_permit_Doing, " vs ", SplitMultiselect(appPermitDoing));
+    console.log(App_permit_Done, " vs ", SplitMultiselect(appPermitDone));
+    //If no new input for any of the fields
     if (
-      await CreateApplication(
-        appAcro,
-        appDesc,
-        appRNumber,
-        appStartDate,
-        appEndDate,
-        SplitMultiselect(appPermitOpen),
-        SplitMultiselect(appPermitToDoList),
-        SplitMultiselect(appPermitDoing),
-        SplitMultiselect(appPermitDone),
-        SplitMultiselect(appPermitCreate)
-      )
+      App_Description === appDesc &&
+      new Date(App_startDate)
+        .toLocaleDateString("pt-br")
+        .split("/")
+        .reverse()
+        .join("-") === appStartDate &&
+      new Date(App_endDate)
+        .toLocaleDateString("pt-br")
+        .split("/")
+        .reverse()
+        .join("-") === appEndDate &&
+      App_permit_Create === SplitMultiselect(appPermitCreate) &&
+      App_permit_Open === SplitMultiselect(appPermitOpen) &&
+      App_permit_toDoList === SplitMultiselect(appPermitToDoList) &&
+      App_permit_Doing === SplitMultiselect(appPermitDoing) &&
+      App_permit_Done === SplitMultiselect(appPermitDone)
     ) {
-      toast.success("Application created successfully!", {
+      toast.error("No new information recorded.", {
         hideProgressBar: true
       });
-
-      // the set stuff change, also, the createapp componen test if working, and edit accordingly
-
-      // e.target.reset();
-      // setUserName();
-      // setPassword();
-      // setEmail();
-      // setSelectedGroups();
+      return;
     }
+    //Start date cannot be later than end date
+    if (appStartDate > appEndDate) {
+      toast.warning("App End Date cannot be before App Start Date.", {
+        hideProgressBar: true
+      });
+      return;
+    }
+
+    if (SplitMultiselect(appPermitCreate) === "") {
+      toast.warning("Cannot leave App_permit_Create empty.", {
+        hideProgressBar: true
+      });
+      return;
+    }
+
+    if (SplitMultiselect(appPermitOpen) === "") {
+      toast.warning("Cannot leave App_permit_Open empty.", {
+        hideProgressBar: true
+      });
+      return;
+    }
+
+    if (SplitMultiselect(appPermitToDoList) === "") {
+      toast.warning("Cannot leave App_permit_toDoList empty.", {
+        hideProgressBar: true
+      });
+      return;
+    }
+
+    if (SplitMultiselect(appPermitDoing) === "") {
+      toast.warning("Cannot leave App_permit_Doing empty.", {
+        hideProgressBar: true
+      });
+      return;
+    }
+
+    if (SplitMultiselect(appPermitDone) === "") {
+      toast.warning("Cannot leave App_permit_Done empty.", {
+        hideProgressBar: true
+      });
+      return;
+    }
+
+    return fetch("/EditApplication", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      },
+      // POST content
+      body: JSON.stringify({
+        App_Acronym: App_Acronym,
+        App_Description: appDesc,
+        App_startDate: appStartDate,
+        App_endDate: appEndDate,
+        App_permit_Create: SplitMultiselect(appPermitCreate),
+        App_permit_Open: SplitMultiselect(appPermitOpen),
+        App_permit_toDoList: SplitMultiselect(appPermitToDoList),
+        App_permit_Doing: SplitMultiselect(appPermitDoing),
+        App_permit_Done: SplitMultiselect(appPermitDone)
+      })
+    }).then(async res => {
+      if (res.status === 200) {
+        {
+          toast.success("Application edited successfully!", {
+            hideProgressBar: true
+          });
+
+          setTimeout(() => {
+            navigate("/TaskManagementSystemPage");
+            sessionStorage.removeItem("ApplicationData");
+          }, 2000);
+        }
+      } else {
+        toast.error("Failed to edit application..", {
+          hideProgressBar: true
+        });
+      }
+    });
   };
-
-  //   const splitted_group = SplitMultiselect(selectedGroups);
-
-  //   if (!username && !password && !email && !selectedGroups) {
-  //     toast.error("None of the fields have an input.", {
-  //       hideProgressBar: true
-  //     });
-  //     return;
-  //   }
-
-  //   if (!username) {
-  //     toast.warning("No username set.", {
-  //       hideProgressBar: true
-  //     });
-  //     return;
-  //   }
-
-  //   if (!password) {
-  //     toast.warning("No password set.", {
-  //       hideProgressBar: true
-  //     });
-  //     return;
-  //   }
-
-  //   // Missing inputs
-  //   if (password && !CheckPasswordField(password)) {
-  //     return;
-  //   }
-
-  //   if (email && !CheckEmailField(email)) {
-  //     return;
-  //   }
-  // };
 
   return (
     <>
@@ -327,7 +396,7 @@ function AppEditPage(individualData) {
                   </td>
                   <td>
                     <button type="submit" className="spaceBetweenButtons">
-                      Create
+                      Edit
                     </button>
                   </td>
                 </tr>

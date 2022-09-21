@@ -4,7 +4,6 @@ import "../Table.css";
 
 function KanbanDisplay() {
   const [appTableData, setAppTableData] = useState([]);
-  // const [planTableData, setPlanTableData] = useState([]);
 
   useEffect(() => {
     GetAllApplications(setAppTableData);
@@ -13,52 +12,59 @@ function KanbanDisplay() {
 
   return (
     <>
-      <table>
-        <head>
-          <title>Kanban Board</title>
-        </head>
-        <body>
-          {appTableData.map(individualData => {
-            return (
-              <tr key={individualData.App_Acronym}>
-                <td key="uniqueID1">
-                  <a
-                    // onClick={() => {
-                    //   sessionStorage.setItem(
-                    //     "ApplicationData",
-                    //     JSON.stringify(individualData)
-                    //   );
-                    // }}
-                    href="/KanbanDisplay"
-                    className="spaceBetweenButtons"
-                  >
-                    {individualData.App_Acronym}
-                  </a>
-                </td>
-                <td key="uniqueID2" className="tooltip">
-                  {individualData.App_Description}
-                  <span className="tooltiptext">
-                    Rnumber: {individualData.App_Rnumber}, <br></br>
-                    {/* Find a way to remove the time for the date value */}
-                    Start Date: {individualData.App_startDate}, <br></br>
-                    End Date: {individualData.App_endDate}, <br></br>
-                    App Permit Open: {individualData.App_permit_Open}, <br></br>
-                    App Permit To-Do-List: {
-                      individualData.App_permit_toDoList
-                    }, <br></br>
-                    App Permit Doing: {individualData.App_permit_Doing},{" "}
-                    <br></br>
-                    App Permit Done: {individualData.App_permit_Done}, <br></br>
-                    App Permit Create: {individualData.App_permit_Create}
-                  </span>
-                </td>
-              </tr>
-            );
-          })}
-        </body>
-      </table>
+      <div className="container">
+        <table>
+          <thead>
+            <tr>
+              <th>
+                <a href="/PlanCreatePage">Create Plan</a>
+                <br></br>
+                <a href="/PlanEditPage">Edit Plan</a>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {appTableData.map(individualData => {
+              return (
+                <tr key={individualData.App_Acronym}>
+                  <td key="uniqueID1">
+                    <a
+                      // onClick={() => {
+                      //   sessionStorage.setItem(
+                      //     "ApplicationData",
+                      //     JSON.stringify(individualData)
+                      //   );
+                      // }}
+                      href="/KanbanDisplay"
+                      className="spaceBetweenButtons"
+                    >
+                      {individualData.App_Acronym}
+                    </a>
+                  </td>
+                  <td key="uniqueID2" className="tooltip">
+                    {individualData.App_Description}
+                    <span className="tooltiptext">
+                      Rnumber: {individualData.App_Rnumber}, <br></br>
+                      {/* Find a way to remove the time for the date value */}
+                      Start Date: {individualData.App_startDate}, <br></br>
+                      End Date: {individualData.App_endDate}, <br></br>
+                      App Permit Open: {individualData.App_permit_Open},{" "}
+                      <br></br>
+                      App Permit To-Do-List:{" "}
+                      {individualData.App_permit_toDoList}, <br></br>
+                      App Permit Doing: {individualData.App_permit_Doing},{" "}
+                      <br></br>
+                      App Permit Done: {individualData.App_permit_Done},{" "}
+                      <br></br>
+                      App Permit Create: {individualData.App_permit_Create}
+                    </span>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
 
-      <body>
         <div
           style={{
             display: "flex",
@@ -181,7 +187,7 @@ function KanbanDisplay() {
             ADD MAP Here
           </div>
         </div>
-      </body>
+      </div>
     </>
   );
 }

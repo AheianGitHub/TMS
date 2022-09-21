@@ -12,18 +12,6 @@ async function CreateApplication(
   appPermitDoing,
   appPermitDone
 ) {
-  console.log(
-    appAcro,
-    appDesc,
-    appRNumber,
-    appStartDate,
-    appEndDate,
-    appPermitCreate,
-    appPermitOpen,
-    appPermitToDoList,
-    appPermitDoing,
-    appPermitDone
-  );
   if (
     !appAcro &&
     !appRNumber &&
