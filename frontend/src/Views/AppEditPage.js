@@ -8,7 +8,7 @@ import GetGroups from "../Components/GetGroups";
 import PreSelect from "../Components/PreSelect";
 import SplitMultiselect from "../Components/SplitMultiselect";
 
-function AppEditPage(individualData) {
+function AppEditPage() {
   let App_Acronym = JSON.parse(
     sessionStorage.getItem("ApplicationData")
   ).App_Acronym;
@@ -159,7 +159,7 @@ function AppEditPage(individualData) {
     }
     //Start date cannot be later than end date
     if (appStartDate > appEndDate) {
-      toast.warning("App End Date cannot be before App Start Date.", {
+      toast.warning("App Start Date cannot be after App End Date.", {
         hideProgressBar: true
       });
       return;
@@ -269,7 +269,6 @@ function AppEditPage(individualData) {
                       onChange={e => setAppStartDate(e.target.value)}
                       type="date"
                       value={appStartDate}
-                      // onfocus="(this.type='date')"
                       autoComplete="off"
                     />
                   </td>

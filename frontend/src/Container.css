@@ -1,0 +1,19 @@
+.container {
+  position: fixed;
+  left: 500px;
+  padding: 0;
+  margin: 0;
+  background-color: #ff00ff;
+}
+
+.left-element {
+  background: green;
+  display: inline-block;
+  float: left;
+}
+
+.right-element {
+  background: red;
+  display: inline-block;
+  float: right;
+}

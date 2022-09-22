@@ -19,8 +19,9 @@ const getAllApplications = require("../Controllers/getAllApplications");
 const createApplication = require("../Controllers/createApplication");
 const editApplication = require("../Controllers/editApplication");
 
+const getAllPlans = require("../Controllers/getAllPlans");
 const createPlan = require("../Controllers/createPlan");
-// const editPlan = require("../Controllers/editPlan");
+const editPlan = require("../Controllers/editPlan");
 
 //===================================================================================================
 routers.use((req, res, next) => {
@@ -47,7 +48,10 @@ routers.post("/GetAllApplications", getAllApplications.getAllApplications);
 routers.post("/CreateApplication", createApplication.createApplication);
 routers.post("/EditApplication", editApplication.editApplication);
 
+routers.post("/GetAllPlans", getAllPlans.getAllPlans);
 routers.post("/CreatePlan", createPlan.createPlan);
-// routers.post("/EditPlan", editPlan.editPlan);
+routers.post("/EditPlan", editPlan.editPlan);
+
+routers.post("/GetPlans", userAccounts.getPlans);
 
 module.exports = routers;

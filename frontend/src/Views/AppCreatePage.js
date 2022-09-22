@@ -24,7 +24,6 @@ function AppCreatePage() {
   const [appPermitDone, setAppPermitDone] = useState([]);
 
   const [groupOptions, setGroupOptions] = useState([]);
-  // const [selectedGroups, setSelectedGroups] = useState([]);
 
   useEffect(() => {
     GetGroups(setGroupOptions);

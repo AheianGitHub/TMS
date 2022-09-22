@@ -23,6 +23,7 @@ function PlanCreatePage() {
   const [planMVPName, setPlanMVPName] = useState();
   const [planStartDate, setPlanStartDate] = useState();
   const [planEndDate, setPlanEndDate] = useState();
+  const [planColour, setPlanColour] = useState();
 
   useEffect(() => {
     navigate("/PlanCreatePage");
@@ -69,7 +70,8 @@ function PlanCreatePage() {
         Plan_MVP_name: planMVPName,
         Plan_startDate: planStartDate,
         Plan_endDate: planEndDate,
-        Plan_app_Acronym: App_Acronym
+        Plan_app_Acronym: App_Acronym,
+        Plan_Colour: planColour
       })
     }).then(async res => {
       if (res.status === 200) {
@@ -82,6 +84,7 @@ function PlanCreatePage() {
           setPlanMVPName();
           setPlanStartDate();
           setPlanEndDate();
+          setPlanColour();
         }
       } else {
         const err_msg = await res.json();
@@ -90,7 +93,7 @@ function PlanCreatePage() {
             hideProgressBar: true
           });
         } else {
-          toast.error("Failed to edit application..", {
+          toast.error("Failed to create plan..", {
             hideProgressBar: true
           });
         }
@@ -110,6 +113,7 @@ function PlanCreatePage() {
                   <th>Plan_startDate</th>
                   <th>Plan_endDate</th>
                   <th>Plan_app_Acronym</th>
+                  <th>Colour for Plan</th>
                 </tr>
               </thead>
               <tbody>
@@ -138,6 +142,15 @@ function PlanCreatePage() {
                     />
                   </td>
                   <td key="uniqueID4">{App_Acronym}</td>
+                  <td key="uniqueID5">
+                    <input
+                      onChange={e => setPlanColour(e.target.value)}
+                      type="color"
+                      id="favcolor"
+                      name="favcolor"
+                      placeholder="#ff0000"
+                    />
+                  </td>
                 </tr>
               </tbody>
 

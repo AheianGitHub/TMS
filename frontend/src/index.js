@@ -27,6 +27,7 @@ import AppEditPage from "./Views/AppEditPage";
 import KanbanDisplay from "./Views/KanbanDisplay";
 import PlanCreatePage from "./Views/PlanCreatePage";
 import PlanEditPage from "./Views/PlanEditPage";
+import TaskCreatePage from "./Views/TaskCreatePage";
 
 import { ToastContainer } from "react-toastify";
 
@@ -78,6 +79,7 @@ export default function SiangCo() {
             <Route path="/KanbanDisplay" element={<KanbanDisplay />} />
             <Route path="/PlanCreatePage" element={<PlanCreatePage />} />
             <Route path="/PlanEditPage" element={<PlanEditPage />} />
+            <Route path="/TaskCreatePage" element={<TaskCreatePage />} />
           </Routes>
         </BrowserRouter>
       </div>

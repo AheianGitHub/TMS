@@ -3,15 +3,6 @@ import GetAllApplications from "../Components/DisplayAllApplications";
 import "../Table.css";
 
 function TaskManagementSystemPage() {
-  //Create 3 Applications in SQL
-  //Display Applications in Task Management System Page(TMSP)
-  //Display Application details via hover over short description text
-  //Create App page -> Create like creating users, update database
-  //-Return to Create App page in case of multi-create
-  //-On return to TMSP, display newly created apps
-  //Edit App page -> Edit app like editing users, update database
-  //-Return to TMSP upon edit to reflect changes
-
   const [groupTableData, setGroupTableData] = useState([]);
 
   useEffect(() => {
@@ -60,8 +51,18 @@ function TaskManagementSystemPage() {
                       <span className="tooltiptext">
                         Rnumber: {individualData.App_Rnumber}, <br></br>
                         {/* Find a way to remove the time for the date value */}
-                        Start Date: {individualData.App_startDate}, <br></br>
-                        End Date: {individualData.App_endDate}, <br></br>
+                        Start Date:{" "}
+                        {new Date(individualData.App_startDate)
+                          .toLocaleDateString("pt-br")
+                          .split("/")
+                          .join("-")}
+                        , <br></br>
+                        End Date:{" "}
+                        {new Date(individualData.App_endDate)
+                          .toLocaleDateString("pt-br")
+                          .split("/")
+                          .join("-")}
+                        , <br></br>
                         App Permit Open: {individualData.App_permit_Open},{" "}
                         <br></br>
                         App Permit To-Do-List:{" "}

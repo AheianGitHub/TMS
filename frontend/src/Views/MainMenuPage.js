@@ -17,6 +17,7 @@ function MainMenuPage() {
           <header className="py-5 mt-5">
             <p className="lead mb-0">
               ============================================================================================================================================================================================
+              <br></br> <p>*Decoration Space: In Construction</p>
               <br></br> Main Menu page by{" "}
               <a
                 href="https://www.linkedin.com/in/taychersiang"
@@ -28,8 +29,6 @@ function MainMenuPage() {
           </header>
           <div className="py-5">
             <p className="lead">
-              Remember why you're here, you can do it!
-              <br></br>
               要求婚咯! Do your best, 加油!
               <br></br>
               <br></br>

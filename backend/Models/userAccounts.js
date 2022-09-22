@@ -365,10 +365,31 @@ async function editApplication(
   });
 }
 
+//===================================Get All Plans=============================================
+const getAllPlans = callback => {
+  // Query
+  let query = mysql.format(
+    "select Plan_MVP_name, Plan_startDate, Plan_endDate, Plan_app_Acronym, Plan_Colour from plan"
+  );
+
+  // Querying
+  db.query(query, (error, result) => {
+    if (error) {
+      throw error;
+    } else {
+      if (result) {
+        callback(null, result);
+      } else if (!result) {
+        callback(null, false);
+      }
+    }
+  });
+};
+
 //==============================================Create Plan======================================================
 
 const createPlan = (request, callback) => {
-  var Query = `INSERT INTO plan (Plan_MVP_name, Plan_startDate, Plan_endDate, Plan_app_Acronym) VALUES ('${request.body.Plan_MVP_name}', '${request.body.Plan_startDate}', '${request.body.Plan_endDate}', '${request.body.Plan_app_Acronym}')`;
+  var Query = `INSERT INTO plan (Plan_MVP_name, Plan_startDate, Plan_endDate, Plan_app_Acronym, Colour) VALUES ('${request.body.Plan_MVP_name}', '${request.body.Plan_startDate}', '${request.body.Plan_endDate}', '${request.body.Plan_app_Acronym}', '${request.body.Colour}')`;
 
   // SQL Query to usergroups Table for groupname
   db.query(Query, (error, results) => {
@@ -376,6 +397,76 @@ const createPlan = (request, callback) => {
       callback(error);
     } else {
       callback(null);
+    }
+  });
+};
+
+//=======================================Edit Plan================================================
+
+async function editPlan(
+  Plan_MVP_name,
+  Plan_startDate,
+  Plan_endDate,
+  Plan_app_Acronym,
+  Plan_Colour,
+  callback
+) {
+  // String and variables if required
+  var set_fields = [];
+  var set_vars = [];
+
+  if (Plan_startDate) {
+    set_fields.push("Plan_startDate = ?");
+    set_vars.push(Plan_startDate);
+  }
+  if (Plan_endDate) {
+    set_fields.push("Plan_endDate = ?");
+    set_vars.push(Plan_endDate);
+  }
+  if (Plan_app_Acronym) {
+    set_fields.push("Plan_app_Acronym = ?");
+    set_vars.push(Plan_app_Acronym);
+  }
+  if (Plan_Colour) {
+    set_fields.push("Plan_Colour = ?");
+    set_vars.push(Plan_Colour);
+  }
+  set_vars.push(Plan_MVP_name);
+
+  // Return if there is nothing to update in the user table
+  if (set_fields.length === 0) {
+    return callback(null);
+  }
+
+  let query = mysql.format(
+    "UPDATE plan SET " + set_fields.toString() + " WHERE Plan_MVP_name = ?",
+    set_vars
+  );
+
+  db.query(query, err => {
+    // Error handling
+    if (err) {
+      console.log("Error encountered when trying to edit plan.");
+      return callback(err, false);
+    }
+    console.log("Successfully edited plan!");
+    return callback(null, true);
+  });
+}
+
+//=======================================Plan Multiselect================================================
+
+const getPlans = (request, response) => {
+  //request -> input, res -> output
+  db.query("select Plan_MVP_name from plan", (err, results) => {
+    if (err) {
+      throw err;
+    } else {
+      if (results.length > 0) {
+        response.send({ result: results });
+      } else {
+        response.send({ message: null });
+      }
     }
   });
 };
@@ -394,5 +485,8 @@ module.exports = {
   getAllApplications,
   createApplication,
   editApplication,
-  createPlan
+  getAllPlans,
+  createPlan,
+  editPlan,
+  getPlans
 };

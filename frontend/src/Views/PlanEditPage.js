@@ -17,15 +17,41 @@ function PlanEditPage() {
     sessionStorage.getItem("ApplicationData")
   ).App_endDate;
 
+  let Plan_MVP_name = JSON.parse(
+    sessionStorage.getItem("PlanData")
+  ).Plan_MVP_name;
+
+  let Plan_startDate = JSON.parse(
+    sessionStorage.getItem("PlanData")
+  ).Plan_startDate;
+
+  let Plan_endDate = JSON.parse(
+    sessionStorage.getItem("PlanData")
+  ).Plan_endDate;
+
+  let Plan_Colour = JSON.parse(sessionStorage.getItem("PlanData")).Plan_Colour;
+
   // Set useNavigate as variable
   const navigate = useNavigate();
   //setUsername = use this to hold/set the values | username = will become the storer of value that is in set__
-  const [planMVPName, setPlanMVPName] = useState();
-  const [planStartDate, setPlanStartDate] = useState();
-  const [planEndDate, setPlanEndDate] = useState();
+  const [planStartDate, setPlanStartDate] = useState(
+    new Date(Plan_startDate)
+      .toLocaleDateString("pt-br")
+      .split("/")
+      .reverse()
+      .join("-")
+  );
+  const [planEndDate, setPlanEndDate] = useState(
+    new Date(Plan_endDate)
+      .toLocaleDateString("pt-br")
+      .split("/")
+      .reverse()
+      .join("-")
+  );
+  const [planColour, setPlanColour] = useState(Plan_Colour);
 
   useEffect(() => {
-    navigate("/PlanCreatePage");
+    navigate("/PlanEditPage");
   }, []);
 
   const handleSubmit = async e => {
@@ -58,7 +84,7 @@ function PlanEditPage() {
       return;
     }
 
-    return fetch("/CreatePlan", {
+    return fetch("/EditPlan", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -66,34 +92,28 @@ function PlanEditPage() {
       },
       // POST content
       body: JSON.stringify({
-        Plan_MVP_name: planMVPName,
+        Plan_MVP_name: Plan_MVP_name,
         Plan_startDate: planStartDate,
         Plan_endDate: planEndDate,
-        Plan_app_Acronym: App_Acronym
+        Plan_app_Acronym: App_Acronym,
+        Plan_Colour: planColour
       })
     }).then(async res => {
       if (res.status === 200) {
         {
-          toast.success("Plan Created Successfully!", {
+          toast.success("Plan Edited Successfully!", {
             hideProgressBar: true
           });
 
-          e.target.reset();
-          setPlanMVPName();
-          setPlanStartDate();
-          setPlanEndDate();
+          setTimeout(() => {
+            navigate("/KanbanDisplay");
+            sessionStorage.removeItem("PlanData");
+          }, 2000);
         }
       } else {
-        const err_msg = await res.json();
-        if (err_msg.duplicate === true) {
-          toast.error("Plan_MVP_name is taken, please use another name.", {
-            hideProgressBar: true
-          });
-        } else {
-          toast.error("Failed to edit application..", {
-            hideProgressBar: true
-          });
-        }
+        toast.error("Failed to edit application..", {
+          hideProgressBar: true
+        });
       }
     });
   };
@@ -110,23 +130,17 @@ function PlanEditPage() {
                   <th>Plan_startDate</th>
                   <th>Plan_endDate</th>
                   <th>Plan_app_Acronym</th>
+                  <th>Colour for Plan</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td key="uniqueID1">
-                    <input
-                      onChange={e => setPlanMVPName(e.target.value.trim())}
-                      name="vanish"
-                      type="text"
-                      placeholder="Plan_MVP_name"
-                      autoComplete="off"
-                    />
-                  </td>
+                  <td key="uniqueID1">{Plan_MVP_name}</td>
                   <td key="uniqueID2">
                     <input
                       onChange={e => setPlanStartDate(e.target.value)}
                       type="date"
+                      value={planStartDate}
                       autoComplete="off"
                     />
                   </td>
@@ -134,10 +148,20 @@ function PlanEditPage() {
                     <input
                       onChange={e => setPlanEndDate(e.target.value)}
                       type="date"
+                      value={planEndDate}
                       autoComplete="off"
                     />
                   </td>
                   <td key="uniqueID4">{App_Acronym}</td>
+                  <td key="uniqueID5">
+                    <input
+                      onChange={e => setPlanColour(e.target.value)}
+                      type="color"
+                      id="favcolor"
+                      name="favcolor"
+                      value={planColour}
+                    />
+                  </td>
                 </tr>
               </tbody>
 
@@ -150,7 +174,7 @@ function PlanEditPage() {
                   </td>
                   <td>
                     <button type="submit" className="spaceBetweenButtons">
-                      Create
+                      Edit
                     </button>
                   </td>
                 </tr>
