@@ -37,9 +37,12 @@ async function CreateApplication(
   }
 
   if (!appAcro.match(/^[A-Za-z]+$/)) {
-    toast.warning("Only alphabets allowed for App_Acronym.", {
-      hideProgressBar: true
-    });
+    toast.warning(
+      "Only alphabets allowed for App_Acronym. Do not include spacing as well",
+      {
+        hideProgressBar: true
+      }
+    );
     return;
   }
 

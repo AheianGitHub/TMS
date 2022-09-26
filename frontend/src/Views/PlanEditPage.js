@@ -57,6 +57,25 @@ function PlanEditPage() {
   const handleSubmit = async e => {
     e.preventDefault();
 
+    if (
+      new Date(Plan_startDate)
+        .toLocaleDateString("pt-br")
+        .split("/")
+        .reverse()
+        .join("-") === planStartDate &&
+      new Date(Plan_endDate)
+        .toLocaleDateString("pt-br")
+        .split("/")
+        .reverse()
+        .join("-") === planEndDate &&
+      Plan_Colour === planColour
+    ) {
+      toast.warning("No changes recorded.", {
+        hideProgressBar: true
+      });
+      return;
+    }
+
     if (planStartDate > planEndDate) {
       toast.warning("Plan End Date cannot be before Plan Start Date.", {
         hideProgressBar: true
@@ -168,7 +187,11 @@ function PlanEditPage() {
               <tbody>
                 <tr>
                   <td>
-                    <a href="/KanbanDisplay" className="spaceBetweenButtons">
+                    <a
+                      href="/KanbanDisplay"
+                      className="spaceBetweenButtons"
+                      // onClick={sessionStorage.removeItem("PlanData")}
+                    >
                       Return to Previous Page
                     </a>
                   </td>

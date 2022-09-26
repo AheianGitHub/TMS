@@ -27,7 +27,7 @@ function UserCreatePage() {
   const handleSubmit = async e => {
     e.preventDefault();
 
-    const splitted_group = SplitMultiselect(selectedGroups);
+    const splitted_group = SplitMultiselect(selectedGroups, "groupname");
 
     if (!username && !password && !email && !selectedGroups) {
       toast.error("None of the fields have an input.", {

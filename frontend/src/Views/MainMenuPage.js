@@ -10,40 +10,33 @@ function MainMenuPage() {
           Hello <strong>{username}</strong>, what would you like to do?
         </p>
       </div>
-
       {/* Main Menu temporary content */}
       <div className="container">
         <div className="pt-5 text-white">
           <header className="py-5 mt-5">
             <p className="lead mb-0">
               ============================================================================================================================================================================================
-              <br></br> <p>*Decoration Space: In Construction</p>
-              <br></br> Main Menu page by{" "}
-              <a
-                href="https://www.linkedin.com/in/taychersiang"
-                className="text-white"
-              >
-                <u>本大爷</u>
-              </a>
+              <br></br>{" "}
+              <strong className="font-weight-bold">Decoration Space:</strong>
             </p>
           </header>
           <div className="py-5">
             <p className="lead">
-              要求婚咯! Do your best, 加油!
-              <br></br>
-              <br></br>
-              <strong className="font-weight-bold">
+              {/* 要求婚咯! Do your best, 加油! */}
+
+              {/* <strong className="font-weight-bold">
                 Cher Siang in 2 years' time:
-              </strong>
+              </strong> */}
             </p>
           </div>
         </div>
       </div>
       <img className="animated-gif" src={SweetLove} />
+      <br></br> Main Menu page by{" "}
+      <a href="https://www.linkedin.com/in/taychersiang" className="text-white">
+        <u>本大爷</u>
+      </a>
       <p>
-        <a href="https://www.gov.sg/article/call-these-helplines-if-you-need-emotional-or-psychological-support">
-          <u>This is a call for help if you ever need it hahaha</u>
-        </a>
         <br></br>
         ============================================================================================================================================================================================
       </p>

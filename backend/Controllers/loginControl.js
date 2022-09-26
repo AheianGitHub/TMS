@@ -1,5 +1,5 @@
 var passport = require("passport");
-var checkGroup = require("./checkGroup");
+var User = require("../Models/userAccounts");
 
 const authenticateUser = (req, res, next) => {
   passport.authenticate("local", (err, user) => {
@@ -16,7 +16,7 @@ const authenticateUser = (req, res, next) => {
         }
         let username = user.username;
 
-        checkGroup.CheckGroup(username, "admin", (err, check_res) => {
+        User.checkGroup(username, "admin", (err, check_res) => {
           let admin_status = check_res;
           let token_data = {
             username: username,

@@ -66,7 +66,7 @@ function UserEditPage(individualData) {
         username: username,
         password: password,
         email: email,
-        groupname: SplitMultiselect(selectedGroups)
+        groupname: SplitMultiselect(selectedGroups, "groupname")
       })
     }).then(res => {
       if (res.status === 200) {

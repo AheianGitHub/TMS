@@ -1,10 +1,13 @@
-async function GetPlans(setPlanOptions) {
-  return fetch("/GetPlans", {
+async function GetPlanTaskCreate(setPlanOptions, Task_app_Acronym) {
+  return fetch("/GetPlanTaskCreate", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json"
-    }
+    },
+    body: JSON.stringify({
+      Task_app_Acronym: Task_app_Acronym
+    })
   })
     .then(async res => await res.json())
     .then(json_res => {
@@ -12,4 +15,4 @@ async function GetPlans(setPlanOptions) {
     });
 }
 
-export default GetPlans;
+export default GetPlanTaskCreate;

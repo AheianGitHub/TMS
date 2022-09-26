@@ -23,6 +23,11 @@ const getAllPlans = require("../Controllers/getAllPlans");
 const createPlan = require("../Controllers/createPlan");
 const editPlan = require("../Controllers/editPlan");
 
+const getPlanTaskCreate = require("../Controllers/getPlanTaskCreate");
+const getPlanColour = require("../Controllers/getPlanColour");
+const createTask = require("../Controllers/createTask");
+const getTasks = require("../Controllers/getTasks");
+
 //===================================================================================================
 routers.use((req, res, next) => {
   res.locals.currentUser = req.user;
@@ -52,6 +57,16 @@ routers.post("/GetAllPlans", getAllPlans.getAllPlans);
 routers.post("/CreatePlan", createPlan.createPlan);
 routers.post("/EditPlan", editPlan.editPlan);
 
-routers.post("/GetPlans", userAccounts.getPlans);
+routers.post("/GetPlanTaskCreate", getPlanTaskCreate.getPlanTaskCreate);
+routers.post("/GetPlanColour", getPlanColour.getPlanColour);
+routers.post("/CreateTask", createTask.createTask);
+routers.post("/GetTasks", getTasks.getTasks);
+
+routers.post("/StateOpen_ToDoList", userAccounts.stateOpen_ToDoList);
+routers.post("/StateToDoList_Doing", userAccounts.stateToDoList_Doing);
+routers.post("/StateDoing_ToDoList", userAccounts.stateDoing_ToDoList);
+routers.post("/StateDoing_Done", userAccounts.stateDoing_Done);
+routers.post("/StateDone_Doing", userAccounts.stateDone_Doing);
+routers.post("/StateDone_Closed", userAccounts.stateDone_Closed);
 
 module.exports = routers;

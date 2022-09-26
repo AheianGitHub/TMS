@@ -276,16 +276,81 @@ const getAllApplications = callback => {
 
 //=======================================Create Application================================================
 
-const createApplication = (request, callback) => {
-  var Query = `INSERT INTO application (App_Acronym, App_Description, App_Rnumber, App_startDate, App_endDate, App_permit_Open, App_permit_toDoList, App_permit_Doing, App_permit_Done, App_permit_Create) VALUES ('${request.body.App_Acronym}', '${request.body.App_Description}', '${request.body.App_Rnumber}', '${request.body.App_startDate}', '${request.body.App_endDate}', '${request.body.App_permit_Open}', '${request.body.App_permit_toDoList}', '${request.body.App_permit_Doing}', '${request.body.App_permit_Done}', '${request.body.App_permit_Create}')`;
+const createApplication = (
+  App_Acronym,
+  App_Description,
+  App_Rnumber,
+  App_startDate,
+  App_endDate,
+  App_permit_Open,
+  App_permit_toDoList,
+  App_permit_Doing,
+  App_permit_Done,
+  App_permit_Create,
+  callback
+) => {
+  var set_fields = [];
+  var set_vars = [];
+
+  if (App_Acronym) {
+    set_fields.push("?");
+    set_vars.push(App_Acronym);
+  }
+  if (App_Description) {
+    set_fields.push("?");
+    set_vars.push(App_Description);
+  }
+  if (App_Rnumber) {
+    set_fields.push("?");
+    set_vars.push(App_Rnumber);
+  }
+  if (App_startDate) {
+    set_fields.push("?");
+    set_vars.push(App_startDate);
+  }
+  if (App_endDate) {
+    set_fields.push("?");
+    set_vars.push(App_endDate);
+  }
+  if (App_permit_Create) {
+    set_fields.push("?");
+    set_vars.push(App_permit_Create);
+  }
+  if (App_permit_Open) {
+    set_fields.push("?");
+    set_vars.push(App_permit_Open);
+  }
+  if (App_permit_toDoList) {
+    set_fields.push("?");
+    set_vars.push(App_permit_toDoList);
+  }
+  if (App_permit_Doing) {
+    set_fields.push("?");
+    set_vars.push(App_permit_Doing);
+  }
+  if (App_permit_Done) {
+    set_fields.push("?");
+    set_vars.push(App_permit_Done);
+  }
+
+  // Return if there is nothing to update in the user table
+  if (set_fields.length === 0) {
+    return callback(null);
+  }
+
+  let Query = mysql.format(
+    "INSERT INTO application VALUES (" + set_fields.toString() + ")",
+    set_vars
+  );
 
   // SQL Query to usergroups Table for groupname
-  db.query(Query, (error, results) => {
+  db.query(Query, error => {
     if (error) {
-      callback(error);
-    } else {
-      callback(null);
+      console.log("Error encountered when trying to create application.");
+      return callback(error, false);
     }
+    console.log("Successfully created application!");
+    return callback(null, true);
   });
 };
 
@@ -389,7 +454,7 @@ const getAllPlans = callback => {
 //==============================================Create Plan======================================================
 
 const createPlan = (request, callback) => {
-  var Query = `INSERT INTO plan (Plan_MVP_name, Plan_startDate, Plan_endDate, Plan_app_Acronym, Colour) VALUES ('${request.body.Plan_MVP_name}', '${request.body.Plan_startDate}', '${request.body.Plan_endDate}', '${request.body.Plan_app_Acronym}', '${request.body.Colour}')`;
+  var Query = `INSERT INTO plan (Plan_MVP_name, Plan_startDate, Plan_endDate, Plan_app_Acronym, Plan_Colour) VALUES ('${request.body.Plan_MVP_name}', '${request.body.Plan_startDate}', '${request.body.Plan_endDate}', '${request.body.Plan_app_Acronym}', '${request.body.Plan_Colour}')`;
 
   // SQL Query to usergroups Table for groupname
   db.query(Query, (error, results) => {
@@ -454,21 +519,247 @@ async function editPlan(
   });
 }
 
-//=======================================Plan Multiselect================================================
+//=======================================Plan Multiselect (Task Create)================================================
 
-const getPlans = (request, response) => {
+const getPlanTaskCreate = (Plan_app_Acronym, callback) => {
   //request -> input, res -> output
-  db.query("select Plan_MVP_name from plan", (err, results) => {
+  db.query(
+    `select Plan_MVP_name from plan where Plan_app_Acronym = "${Plan_app_Acronym}"`,
+    (err, results) => {
+      if (err) {
+        throw err;
+      } else {
+        if (results.length > 0) {
+          callback({ result: results });
+        } else {
+          callback({ message: null });
+        }
+      }
+    }
+  );
+};
+
+//=======================================Get Plan Colour================================================
+
+const getPlanColour = (Plan_MVP_name, callback) => {
+  let query = mysql.format(
+    `select Plan_Colour from plan where Plan_MVP_name = '${Plan_MVP_name}'`
+    // Plan_MVP_name
+  );
+  //request -> input, res -> output
+
+  db.query(query, (err, results) => {
+    // Error handling
     if (err) {
       throw err;
     } else {
       if (results.length > 0) {
-        response.send({ result: results });
+        callback({ result: results });
       } else {
-        response.send({ message: null });
+        callback({ message: null });
       }
     }
   });
+};
+
+//==============================================Create Task======================================================
+
+const createTask = (
+  Task_name,
+  Task_description,
+  Task_notes,
+  Task_id,
+  Task_plan,
+  Task_app_Acronym,
+  Task_state,
+  Task_creator,
+  Task_owner,
+  Task_createDate,
+  callback
+) => {
+  var set_fields = [];
+  var set_vars = [];
+
+  if (Task_name) {
+    set_fields.push("?");
+    set_vars.push(Task_name);
+  }
+  if (Task_description) {
+    set_fields.push("?");
+    set_vars.push(Task_description);
+  }
+  if (Task_notes) {
+    set_fields.push("?");
+    set_vars.push(Task_notes);
+  }
+  if (Task_id) {
+    set_fields.push("?");
+    set_vars.push(Task_id);
+  }
+  if (Task_plan) {
+    set_fields.push("?");
+    set_vars.push(Task_plan);
+  }
+  if (!Task_plan) {
+    set_fields.push("?");
+    set_vars.push(Task_plan);
+  }
+  if (Task_app_Acronym) {
+    set_fields.push("?");
+    set_vars.push(Task_app_Acronym);
+  }
+  if (Task_state) {
+    set_fields.push("?");
+    set_vars.push(Task_state);
+  }
+  if (Task_creator) {
+    set_fields.push("?");
+    set_vars.push(Task_creator);
+  }
+  if (Task_owner) {
+    set_fields.push("?");
+    set_vars.push(Task_owner);
+  }
+  if (Task_createDate) {
+    set_fields.push("?");
+    set_vars.push(Task_createDate);
+  }
+
+  // Return if there is nothing to update in the user table
+  if (set_fields.length === 0) {
+    return callback(null);
+  }
+
+  let Query = mysql.format(
+    "INSERT INTO task VALUES (" + set_fields.toString() + ")",
+    set_vars
+  );
+
+  // SQL Query to usergroups Table for groupname
+  db.query(Query, error => {
+    if (error) {
+      console.log("Error encountered when trying to create task.");
+      return callback(error, false);
+    }
+    console.log("Successfully created task!");
+    return callback(null, true);
+  });
+};
+
+//=======================================Get Tasks================================================
+
+const getTasks = (Task_app_Acronym, callback) => {
+  //request -> input, res -> output
+  db.query(
+    `select Task_name, Task_description, Task_notes, Task_id, Task_plan, Task_app_Acronym, Task_state, Task_creator, Task_owner, Task_createDate from task where Task_app_Acronym = "${Task_app_Acronym}"`,
+    (err, results) => {
+      if (err) {
+        throw err;
+      } else {
+        if (results.length > 0) {
+          callback({ result: results });
+        } else {
+          callback({ message: null });
+        }
+      }
+    }
+  );
+};
+
+//=======================================StateOpen_ToDoList================================================
+const stateOpen_ToDoList = (request, response) => {
+  //request -> input, res -> output
+  db.query(
+    `UPDATE task set Task_state = "To-Do-List" WHERE Task_name = ?`,
+    [request.body.Task_name],
+    (err, results) => {
+      if (err) {
+        throw err;
+      } else {
+        response.send({ result: true });
+      }
+    }
+  );
+};
+
+//=======================================StateToDoList_Doing================================================
+const stateToDoList_Doing = (request, response) => {
+  //request -> input, res -> output
+  db.query(
+    `UPDATE task set Task_state = "Doing" WHERE Task_name = ?`,
+    [request.body.Task_name],
+    (err, results) => {
+      if (err) {
+        throw err;
+      } else {
+        response.send({ result: true });
+      }
+    }
+  );
+};
+
+//=======================================StateDoing_ToDoList================================================
+const stateDoing_ToDoList = (request, response) => {
+  //request -> input, res -> output
+  db.query(
+    `UPDATE task set Task_state = "To-Do-List" WHERE Task_name = ?`,
+    [request.body.Task_name],
+    (err, results) => {
+      if (err) {
+        throw err;
+      } else {
+        response.send({ result: true });
+      }
+    }
+  );
+};
+
+//=======================================StateDoing_Done================================================
+const stateDoing_Done = (request, response) => {
+  //request -> input, res -> output
+  db.query(
+    `UPDATE task set Task_state = "Done" WHERE Task_name = ?`,
+    [request.body.Task_name],
+    (err, results) => {
+      if (err) {
+        throw err;
+      } else {
+        response.send({ result: true });
+      }
+    }
+  );
+};
+
+//=======================================StateDone_Doing================================================
+const stateDone_Doing = (request, response) => {
+  //request -> input, res -> output
+  db.query(
+    `UPDATE task set Task_state = "Doing" WHERE Task_name = ?`,
+    [request.body.Task_name],
+    (err, results) => {
+      if (err) {
+        throw err;
+      } else {
+        response.send({ result: true });
+      }
+    }
+  );
+};
+
+//=======================================StateDone_Closed================================================
+const stateDone_Closed = (request, response) => {
+  //request -> input, res -> output
+  db.query(
+    `UPDATE task set Task_state = "Closed" WHERE Task_name = ?`,
+    [request.body.Task_name],
+    (err, results) => {
+      if (err) {
+        throw err;
+      } else {
+        response.send({ result: true });
+      }
+    }
+  );
 };
 
 module.exports = {
@@ -488,5 +779,14 @@ module.exports = {
   getAllPlans,
   createPlan,
   editPlan,
-  getPlans
+  getPlanTaskCreate,
+  getPlanColour,
+  createTask,
+  getTasks,
+  stateOpen_ToDoList,
+  stateToDoList_Doing,
+  stateDoing_ToDoList,
+  stateDoing_Done,
+  stateDone_Doing,
+  stateDone_Closed
 };

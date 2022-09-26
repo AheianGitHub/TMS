@@ -1,4 +1,4 @@
-function SplitMultiselect(selectedGroups) {
+function SplitMultiselect(selectedGroups, column_name) {
   if (!selectedGroups) {
     return;
   }
@@ -12,8 +12,8 @@ function SplitMultiselect(selectedGroups) {
     //if-else: if concatGroups not empty, do ? (add "," then groupname). else do : (add groupname)
     concatGroups =
       concatGroups != ""
-        ? concatGroups + "," + item.groupname
-        : concatGroups + item.groupname;
+        ? concatGroups + "," + item[column_name]
+        : concatGroups + item[column_name];
   });
   // console.log("Completed groupname string to send fetch", concatGroups);
   return concatGroups;

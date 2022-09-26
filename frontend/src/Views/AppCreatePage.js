@@ -40,11 +40,11 @@ function AppCreatePage() {
         appRNumber,
         appStartDate,
         appEndDate,
-        SplitMultiselect(appPermitCreate),
-        SplitMultiselect(appPermitOpen),
-        SplitMultiselect(appPermitToDoList),
-        SplitMultiselect(appPermitDoing),
-        SplitMultiselect(appPermitDone)
+        SplitMultiselect(appPermitCreate, "groupname"),
+        SplitMultiselect(appPermitOpen, "groupname"),
+        SplitMultiselect(appPermitToDoList, "groupname"),
+        SplitMultiselect(appPermitDoing, "groupname"),
+        SplitMultiselect(appPermitDone, "groupname")
       )
     ) {
       toast.success("Application created successfully!", {

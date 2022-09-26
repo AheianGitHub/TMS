@@ -2,59 +2,103 @@ import React, { useState, useEffect, Component } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Multiselect } from "multiselect-react-dropdown";
-import GetPlans from "../Components/GetPlans";
+import GetPlanTaskCreate from "../Components/GetPlanTaskCreate";
+import GetPlanColour from "../Components/GetPlanColour";
+import GetTasks from "../Components/GetTasks";
+import SplitMultiselect from "../Components/SplitMultiselect";
 
 import "../Table.css";
 
+//Plan multiselect, only display those that have same app-acronym
+//task_id, take gettasks.length and
+
 function TaskCreatePage() {
-  let Task_id = JSON.parse(
-    sessionStorage.getItem("ApplicationData")
-  ).App_Rnumber;
-
-  let App_startDate = JSON.parse(
-    sessionStorage.getItem("ApplicationData")
-  ).App_startDate;
-
-  let App_endDate = JSON.parse(
-    sessionStorage.getItem("ApplicationData")
-  ).App_endDate;
-
   // Set useNavigate as variable
   const navigate = useNavigate();
   //setUsername = use this to hold/set the values | username = will become the storer of value that is in set__
   const [Task_name, setTask_name] = useState();
   const [Task_description, setTask_description] = useState();
-  const [Task_notes, setTask_notes] = useState();
-  // const [Task_id, setTask_id] = useState();
   const [Task_plan, setTask_plan] = useState([]);
-  const [Task_app_Acronym, setTask_app_Acronym] = useState();
-  const [Task_state, setTask_state] = useState();
-  const [Task_creator, setTask_creator] = useState();
-  const [Task_owner, setTask_owner] = useState();
-  const [Task_createDate, setTask_createDate] = useState();
+  const [taskCount, setTaskCount] = useState([]);
+  const [Task_colour, setTask_colour] = useState();
 
-  //creator = owner, onEdit or onShift: owner = person who made edit
-  //task_id = app_rnumber + (no.of task in app - create a getTask function, then .length() the result) + 1
-  //task_state = force it to always be Open on creation, can only edit task_state via shifting, edit cannot
-  //task_createDate = get current date, will not change after that, same as creator
+  let Task_id =
+    JSON.parse(sessionStorage.getItem("ApplicationData")).App_Acronym +
+    "_" +
+    parseInt(
+      JSON.parse(sessionStorage.getItem("ApplicationData")).App_Rnumber +
+        taskCount.length +
+        1
+    ).toString();
+
+  let Task_app_Acronym = JSON.parse(
+    sessionStorage.getItem("ApplicationData")
+  ).App_Acronym;
+
+  let Task_state = "Open";
+  let Task_creator = JSON.parse(sessionStorage.getItem("token")).token.username;
+  let Task_owner = Task_creator;
+  let Task_createDate = new Date()
+    .toLocaleDateString("pt-br")
+    .split("/")
+    .reverse()
+    .join("-");
+
+  let Task_notes =
+    Task_creator +
+    " created task: " +
+    Task_name +
+    " (Owner: " +
+    Task_owner +
+    ", Current state: " +
+    Task_state +
+    ", Created Date: " +
+    Task_createDate +
+    ").";
 
   const [planOptions, setPlanOptions] = useState([]);
 
   useEffect(() => {
-    GetPlans(setPlanOptions);
+    GetPlanTaskCreate(setPlanOptions, Task_app_Acronym);
+    GetTasks(
+      setTaskCount,
+      JSON.parse(sessionStorage.getItem("ApplicationData")).App_Acronym
+    );
     navigate("/TaskCreatePage");
-  }, []);
+  }, [taskCount]);
 
   const handleSubmit = async e => {
     e.preventDefault();
 
+    if (SplitMultiselect(Task_plan, "Plan_MVP_name")) {
+      GetPlanColour(
+        SplitMultiselect(Task_plan, "Plan_MVP_name"),
+        setTask_colour
+      );
+      // console.log(Task_colour);
+    }
+
+    // console.log(
+    //   "Task name: " + Task_name,
+    //   ", Task descri:" + Task_description,
+    //   ", Task_plan:" + SplitMultiselect(Task_plan, "Plan_MVP_name"),
+    //   ", Task_notes:" + Task_notes,
+    //   ", Task_id:" + Task_id,
+    //   ", Task_app_Acronym:" + Task_app_Acronym,
+    //   ", Task_state:" + Task_state,
+    //   ", Task_creator:" + Task_creator,
+    //   ", Task_owner:" + Task_owner,
+    //   ", Task_createDate:" + Task_createDate,
+    //   ", Task_colour:" + Task_colour
+    // );
+
     //=====================================Toastify=====================================
-    // if (planStartDate > planEndDate) {
-    //   toast.warning("Plan End Date cannot be before Plan Start Date.", {
-    //     hideProgressBar: true
-    //   });
-    //   return;
-    // }
+    if (!Task_name) {
+      toast.warning("Please enter task name.", {
+        hideProgressBar: true
+      });
+      return;
+    }
 
     // if (planStartDate < App_startDate || planStartDate > App_endDate) {
     //   toast.warning(
@@ -86,9 +130,9 @@ function TaskCreatePage() {
       body: JSON.stringify({
         Task_name: Task_name,
         Task_description: Task_description,
+        Task_plan: SplitMultiselect(Task_plan, "Plan_MVP_name"),
         Task_notes: Task_notes,
         Task_id: Task_id,
-        Task_plan: Task_plan,
         Task_app_Acronym: Task_app_Acronym,
         Task_state: Task_state,
         Task_creator: Task_creator,

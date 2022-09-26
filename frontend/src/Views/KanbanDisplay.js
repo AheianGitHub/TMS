@@ -1,5 +1,18 @@
 import { useState, useEffect } from "react";
 import GetAllPlans from "../Components/DisplayAllPlans";
+import GetTasks from "../Components/GetTasks";
+
+import StateOpen_ToDoList from "../Components/StateOpen_ToDoList";
+import StateToDoList_Doing from "../Components/StateToDoList_Doing";
+import StateDoing_ToDoList from "../Components/StateDoing_ToDoList";
+import StateDoing_Done from "../Components/StateDoing_Done";
+import StateDone_Doing from "../Components/StateDone_Doing";
+import StateDone_Closed from "../Components/StateDone_Closed";
+
+import CheckGroup from "../Components/CheckGroup";
+
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import "../Table.css";
 
 function KanbanDisplay() {
@@ -34,11 +47,39 @@ function KanbanDisplay() {
     sessionStorage.getItem("ApplicationData")
   ).App_permit_Done;
 
-  const [planTableData, setPlanTableData] = useState([]);
+  const token = JSON.parse(sessionStorage.getItem("token")).token;
 
+  const [planTableData, setPlanTableData] = useState([]);
+  const [taskTableData, setTaskTableData] = useState([]);
+  const [PM, setPM] = useState();
+
+  const [pCreate, setPCreate] = useState();
+  const [pOpen, setPOpen] = useState();
+  const [pToDoList, setPToDoList] = useState();
+  const [pDoing, setPDoing] = useState();
+  const [pDone, setPDone] = useState();
+
+  // Mounting useeffect
+  useEffect(() => {
+    const InitPage = async () => {
+      // Setting all permissions
+      // Plan permission
+      setPM(await CheckGroup(token.username, "Project Manager"));
+      // Task permissions
+      setPCreate(await CheckGroup(token.username, App_permit_Create));
+      setPOpen(await CheckGroup(token.username, App_permit_Open));
+      setPToDoList(await CheckGroup(token.username, App_permit_toDoList));
+      setPDoing(await CheckGroup(token.username, App_permit_Doing));
+      setPDone(await CheckGroup(token.username, App_permit_Done));
+    };
+    InitPage();
+  }, []);
+
+  // Update useffect
   useEffect(() => {
     GetAllPlans(setPlanTableData);
-  }, []);
+    GetTasks(setTaskTableData, App_Acronym);
+  }, [taskTableData]);
 
   return (
     <>
@@ -112,7 +153,7 @@ function KanbanDisplay() {
               <tr>
                 <th>Plan_MVP_name</th>
                 <th>
-                  <a href="/PlanCreatePage">Create Plan</a>
+                  {PM === true && <a href="/PlanCreatePage">Create Plan</a>}
                 </th>
               </tr>
             </thead>
@@ -147,18 +188,20 @@ function KanbanDisplay() {
                         </span>
                       </td>
                       <td>
-                        <a
-                          onClick={() => {
-                            sessionStorage.setItem(
-                              "PlanData",
-                              JSON.stringify(individualData)
-                            );
-                          }}
-                          href="/PlanEditPage"
-                          // className="spaceBetweenButtons"
-                        >
-                          Edit Plan
-                        </a>
+                        {PM === true && (
+                          <a
+                            onClick={() => {
+                              sessionStorage.setItem(
+                                "PlanData",
+                                JSON.stringify(individualData)
+                              );
+                            }}
+                            href="/PlanEditPage"
+                            // className="spaceBetweenButtons"
+                          >
+                            Edit Plan
+                          </a>
+                        )}
                       </td>
                     </tr>
                   );
@@ -178,9 +221,10 @@ function KanbanDisplay() {
           border: "solid"
         }}
       >
-        <a href="/TaskCreatePage">Create Task</a>
+        {pCreate === true && <a href="/TaskCreatePage">Create Task</a>}
+        {/* <a href="/TaskCreatePage">Create Task</a> */}
         &ensp;
-        <a href="/TaskEditPage">Edit Task</a>
+        {/* <a href="/TaskEditPage">Edit Task</a> */}
       </div>
 
       {/* ===========================KanBan Board====================================================== */}
@@ -210,8 +254,74 @@ function KanbanDisplay() {
           >
             OPEN
           </div>
-          <br />
-          ADD MAP Here
+          <table style={{ width: "100%" }}>
+            <thead></thead>
+            <tbody>
+              {taskTableData.map(individualData => {
+                if (individualData.Task_state === "Open") {
+                  return (
+                    <tr key={individualData.Task_name}>
+                      <td
+                        key="uniqueID1"
+                        className="tooltip"
+                        style={{
+                          // borderColor: individualData.Task_colour,
+                          borderWidth: "2px"
+                        }}
+                      >
+                        {pOpen === true && (
+                          <ArrowForwardIcon
+                            // value="check"
+                            // selected={individualData.status}
+                            onClick={() => {
+                              StateOpen_ToDoList(individualData.Task_name);
+                            }}
+                          />
+                        )}
+
+                        {individualData.Task_name}
+                        <span className="tooltiptext">
+                          Task Description: {individualData.Task_description},{" "}
+                          <br></br>
+                          Task Notes: {individualData.Task_notes}, <br></br>
+                          Task ID: {individualData.Task_id}, <br></br>
+                          Task Plan: {individualData.Task_plan}, <br></br>
+                          Task App Acronym: {
+                            individualData.Task_app_Acronym
+                          }, <br></br>
+                          Task State: {individualData.Task_state},<br></br>
+                          Task Creator: {individualData.Task_creator}, <br></br>
+                          Task Owner: {individualData.Task_owner}, <br></br>
+                          Task Created Date:{" "}
+                          {new Date(individualData.Task_createDate)
+                            .toLocaleDateString("pt-br")
+                            .split("/")
+                            .join("-")}
+                          <br></br>
+                        </span>
+                      </td>
+                      <td>
+                        {pOpen === true && (
+                          <a
+                            onClick={() => {
+                              sessionStorage.setItem(
+                                "PlanData",
+                                JSON.stringify(individualData)
+                              );
+                            }}
+                            href="/TaskEditPage"
+                            // className="spaceBetweenButtons"
+                          >
+                            Edit Task
+                          </a>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                }
+              })}
+            </tbody>
+          </table>
         </div>
 
         <div
@@ -231,10 +341,76 @@ function KanbanDisplay() {
               padding: "5px"
             }}
           >
-            TO DO LIST
+            TO-DO-LIST
           </div>
-          <br />
-          ADD MAP Here
+          <table style={{ width: "100%" }}>
+            <thead></thead>
+            <tbody>
+              {taskTableData.map(individualData => {
+                if (individualData.Task_state === "To-Do-List") {
+                  return (
+                    <tr key={individualData.Task_name}>
+                      <td
+                        key="uniqueID1"
+                        className="tooltip"
+                        style={{
+                          // borderColor: individualData.Task_colour,
+                          borderWidth: "2px"
+                        }}
+                      >
+                        {pToDoList === true && (
+                          <ArrowForwardIcon
+                            // value="check"
+                            // selected={individualData.status}
+                            onClick={() => {
+                              StateToDoList_Doing(individualData.Task_name);
+                            }}
+                          />
+                        )}
+
+                        {individualData.Task_name}
+                        <span className="tooltiptext">
+                          Task Description: {individualData.Task_description},{" "}
+                          <br></br>
+                          Task Notes: {individualData.Task_notes}, <br></br>
+                          Task ID: {individualData.Task_id}, <br></br>
+                          Task Plan: {individualData.Task_plan}, <br></br>
+                          Task App Acronym: {
+                            individualData.Task_app_Acronym
+                          }, <br></br>
+                          Task State: {individualData.Task_state},<br></br>
+                          Task Creator: {individualData.Task_creator}, <br></br>
+                          Task Owner: {individualData.Task_owner}, <br></br>
+                          Task Created Date:{" "}
+                          {new Date(individualData.Task_createDate)
+                            .toLocaleDateString("pt-br")
+                            .split("/")
+                            .join("-")}
+                          <br></br>
+                        </span>
+                      </td>
+                      <td>
+                        {pToDoList === true && (
+                          <a
+                            onClick={() => {
+                              sessionStorage.setItem(
+                                "PlanData",
+                                JSON.stringify(individualData)
+                              );
+                            }}
+                            href="/TaskEditPage"
+                            // className="spaceBetweenButtons"
+                          >
+                            Edit Task
+                          </a>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                }
+              })}
+            </tbody>
+          </table>
         </div>
 
         <div
@@ -256,8 +432,83 @@ function KanbanDisplay() {
           >
             DOING
           </div>
-          <br />
-          ADD MAP Here
+          <table style={{ width: "100%" }}>
+            <thead></thead>
+            <tbody>
+              {taskTableData.map(individualData => {
+                if (individualData.Task_state === "Doing") {
+                  return (
+                    <tr key={individualData.Task_name}>
+                      <td
+                        key="uniqueID1"
+                        className="tooltip"
+                        style={{
+                          // borderColor: individualData.Task_colour,
+                          borderWidth: "2px"
+                        }}
+                      >
+                        {pDoing === true && (
+                          <ArrowForwardIcon
+                            // value="check"
+                            // selected={individualData.status}
+                            onClick={() => {
+                              StateDoing_Done(individualData.Task_name);
+                            }}
+                          />
+                        )}
+                        ===
+                        {pDoing === true && (
+                          <ArrowBackIcon
+                            // value="check"
+                            // selected={individualData.status}
+                            onClick={() => {
+                              StateDoing_ToDoList(individualData.Task_name);
+                            }}
+                          />
+                        )}
+                        {individualData.Task_name}
+                        <span className="tooltiptext">
+                          Task Description: {individualData.Task_description},{" "}
+                          <br></br>
+                          Task Notes: {individualData.Task_notes}, <br></br>
+                          Task ID: {individualData.Task_id}, <br></br>
+                          Task Plan: {individualData.Task_plan}, <br></br>
+                          Task App Acronym: {
+                            individualData.Task_app_Acronym
+                          }, <br></br>
+                          Task State: {individualData.Task_state},<br></br>
+                          Task Creator: {individualData.Task_creator}, <br></br>
+                          Task Owner: {individualData.Task_owner}, <br></br>
+                          Task Created Date:{" "}
+                          {new Date(individualData.Task_createDate)
+                            .toLocaleDateString("pt-br")
+                            .split("/")
+                            .join("-")}
+                          <br></br>
+                        </span>
+                      </td>
+                      <td>
+                        {pDoing === true && (
+                          <a
+                            onClick={() => {
+                              sessionStorage.setItem(
+                                "PlanData",
+                                JSON.stringify(individualData)
+                              );
+                            }}
+                            href="/TaskEditPage"
+                            // className="spaceBetweenButtons"
+                          >
+                            Edit Task
+                          </a>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                }
+              })}
+            </tbody>
+          </table>
         </div>
 
         <div
@@ -279,8 +530,83 @@ function KanbanDisplay() {
           >
             DONE
           </div>
-          <br />
-          ADD MAP Here
+          <table style={{ width: "100%" }}>
+            <thead></thead>
+            <tbody>
+              {taskTableData.map(individualData => {
+                if (individualData.Task_state === "Done") {
+                  return (
+                    <tr key={individualData.Task_name}>
+                      <td
+                        key="uniqueID1"
+                        className="tooltip"
+                        style={{
+                          // borderColor: individualData.Task_colour,
+                          borderWidth: "2px"
+                        }}
+                      >
+                        {pDone === true && (
+                          <ArrowForwardIcon
+                            // value="check"
+                            // selected={individualData.status}
+                            onClick={() => {
+                              StateDone_Closed(individualData.Task_name);
+                            }}
+                          />
+                        )}
+                        ===
+                        {pDone === true && (
+                          <ArrowBackIcon
+                            // value="check"
+                            // selected={individualData.status}
+                            onClick={() => {
+                              StateDone_Doing(individualData.Task_name);
+                            }}
+                          />
+                        )}
+                        {individualData.Task_name}
+                        <span className="tooltiptext">
+                          Task Description: {individualData.Task_description},{" "}
+                          <br></br>
+                          Task Notes: {individualData.Task_notes}, <br></br>
+                          Task ID: {individualData.Task_id}, <br></br>
+                          Task Plan: {individualData.Task_plan}, <br></br>
+                          Task App Acronym: {
+                            individualData.Task_app_Acronym
+                          }, <br></br>
+                          Task State: {individualData.Task_state},<br></br>
+                          Task Creator: {individualData.Task_creator}, <br></br>
+                          Task Owner: {individualData.Task_owner}, <br></br>
+                          Task Created Date:{" "}
+                          {new Date(individualData.Task_createDate)
+                            .toLocaleDateString("pt-br")
+                            .split("/")
+                            .join("-")}
+                          <br></br>
+                        </span>
+                      </td>
+                      <td>
+                        {pDone === true && (
+                          <a
+                            onClick={() => {
+                              sessionStorage.setItem(
+                                "PlanData",
+                                JSON.stringify(individualData)
+                              );
+                            }}
+                            href="/TaskEditPage"
+                            // className="spaceBetweenButtons"
+                          >
+                            Edit Task
+                          </a>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                }
+              })}
+            </tbody>
+          </table>
         </div>
 
         <div
@@ -302,8 +628,62 @@ function KanbanDisplay() {
           >
             CLOSED
           </div>
-          <br />
-          ADD MAP Here
+          <table style={{ width: "100%" }}>
+            <thead></thead>
+            <tbody>
+              {taskTableData.map(individualData => {
+                if (individualData.Task_state === "Closed") {
+                  return (
+                    <tr key={individualData.Task_name}>
+                      <td
+                        key="uniqueID1"
+                        className="tooltip"
+                        style={{
+                          // borderColor: individualData.Task_colour,
+                          borderWidth: "2px"
+                        }}
+                      >
+                        {individualData.Task_name}
+                        <span className="tooltiptext">
+                          Task Description: {individualData.Task_description},{" "}
+                          <br></br>
+                          Task Notes: {individualData.Task_notes}, <br></br>
+                          Task ID: {individualData.Task_id}, <br></br>
+                          Task Plan: {individualData.Task_plan}, <br></br>
+                          Task App Acronym: {
+                            individualData.Task_app_Acronym
+                          }, <br></br>
+                          Task State: {individualData.Task_state},<br></br>
+                          Task Creator: {individualData.Task_creator}, <br></br>
+                          Task Owner: {individualData.Task_owner}, <br></br>
+                          Task Created Date:{" "}
+                          {new Date(individualData.Task_createDate)
+                            .toLocaleDateString("pt-br")
+                            .split("/")
+                            .join("-")}
+                          <br></br>
+                        </span>
+                      </td>
+                      {/* <td>
+                        <a
+                          onClick={() => {
+                            sessionStorage.setItem(
+                              "PlanData",
+                              JSON.stringify(individualData)
+                            );
+                          }}
+                          href="/TaskEditPage"
+                          // className="spaceBetweenButtons"
+                        >
+                          Edit Task
+                        </a>
+                      </td> */}
+                    </tr>
+                  );
+                }
+              })}
+            </tbody>
+          </table>
         </div>
       </div>
     </>

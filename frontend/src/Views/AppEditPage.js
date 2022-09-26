@@ -124,15 +124,31 @@ function AppEditPage() {
       " vs ",
       appEndDate
     );
-    console.log(App_permit_Create, " vs ", SplitMultiselect(appPermitCreate));
-    console.log(App_permit_Open, " vs ", SplitMultiselect(appPermitOpen));
+    console.log(
+      App_permit_Create,
+      " vs ",
+      SplitMultiselect(appPermitCreate, "groupname")
+    );
+    console.log(
+      App_permit_Open,
+      " vs ",
+      SplitMultiselect(appPermitOpen, "groupname")
+    );
     console.log(
       App_permit_toDoList,
       " vs ",
-      SplitMultiselect(appPermitToDoList)
+      SplitMultiselect(appPermitToDoList, "groupname")
     );
-    console.log(App_permit_Doing, " vs ", SplitMultiselect(appPermitDoing));
-    console.log(App_permit_Done, " vs ", SplitMultiselect(appPermitDone));
+    console.log(
+      App_permit_Doing,
+      " vs ",
+      SplitMultiselect(appPermitDoing, "groupname")
+    );
+    console.log(
+      App_permit_Done,
+      " vs ",
+      SplitMultiselect(appPermitDone, "groupname")
+    );
     //If no new input for any of the fields
     if (
       App_Description === appDesc &&
@@ -146,11 +162,12 @@ function AppEditPage() {
         .split("/")
         .reverse()
         .join("-") === appEndDate &&
-      App_permit_Create === SplitMultiselect(appPermitCreate) &&
-      App_permit_Open === SplitMultiselect(appPermitOpen) &&
-      App_permit_toDoList === SplitMultiselect(appPermitToDoList) &&
-      App_permit_Doing === SplitMultiselect(appPermitDoing) &&
-      App_permit_Done === SplitMultiselect(appPermitDone)
+      App_permit_Create === SplitMultiselect(appPermitCreate, "groupname") &&
+      App_permit_Open === SplitMultiselect(appPermitOpen, "groupname") &&
+      App_permit_toDoList ===
+        SplitMultiselect(appPermitToDoList, "groupname") &&
+      App_permit_Doing === SplitMultiselect(appPermitDoing, "groupname") &&
+      App_permit_Done === SplitMultiselect(appPermitDone, "groupname")
     ) {
       toast.error("No new information recorded.", {
         hideProgressBar: true
@@ -165,35 +182,35 @@ function AppEditPage() {
       return;
     }
 
-    if (SplitMultiselect(appPermitCreate) === "") {
+    if (SplitMultiselect(appPermitCreate, "groupname") === "") {
       toast.warning("Cannot leave App_permit_Create empty.", {
         hideProgressBar: true
       });
       return;
     }
 
-    if (SplitMultiselect(appPermitOpen) === "") {
+    if (SplitMultiselect(appPermitOpen, "groupname") === "") {
       toast.warning("Cannot leave App_permit_Open empty.", {
         hideProgressBar: true
       });
       return;
     }
 
-    if (SplitMultiselect(appPermitToDoList) === "") {
+    if (SplitMultiselect(appPermitToDoList, "groupname") === "") {
       toast.warning("Cannot leave App_permit_toDoList empty.", {
         hideProgressBar: true
       });
       return;
     }
 
-    if (SplitMultiselect(appPermitDoing) === "") {
+    if (SplitMultiselect(appPermitDoing, "groupname") === "") {
       toast.warning("Cannot leave App_permit_Doing empty.", {
         hideProgressBar: true
       });
       return;
     }
 
-    if (SplitMultiselect(appPermitDone) === "") {
+    if (SplitMultiselect(appPermitDone, "groupname") === "") {
       toast.warning("Cannot leave App_permit_Done empty.", {
         hideProgressBar: true
       });
@@ -212,11 +229,11 @@ function AppEditPage() {
         App_Description: appDesc,
         App_startDate: appStartDate,
         App_endDate: appEndDate,
-        App_permit_Create: SplitMultiselect(appPermitCreate),
-        App_permit_Open: SplitMultiselect(appPermitOpen),
-        App_permit_toDoList: SplitMultiselect(appPermitToDoList),
-        App_permit_Doing: SplitMultiselect(appPermitDoing),
-        App_permit_Done: SplitMultiselect(appPermitDone)
+        App_permit_Create: SplitMultiselect(appPermitCreate, "groupname"),
+        App_permit_Open: SplitMultiselect(appPermitOpen, "groupname"),
+        App_permit_toDoList: SplitMultiselect(appPermitToDoList, "groupname"),
+        App_permit_Doing: SplitMultiselect(appPermitDoing, "groupname"),
+        App_permit_Done: SplitMultiselect(appPermitDone, "groupname")
       })
     }).then(async res => {
       if (res.status === 200) {
