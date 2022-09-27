@@ -6,6 +6,8 @@ function TaskManagementSystemPage() {
   const [groupTableData, setGroupTableData] = useState([]);
 
   useEffect(() => {
+    sessionStorage.removeItem("ApplicationData");
+    sessionStorage.removeItem("TaskData");
     GetAllApplications(setGroupTableData);
   }, []);
 

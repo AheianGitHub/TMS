@@ -300,6 +300,10 @@ const createApplication = (
     set_fields.push("?");
     set_vars.push(App_Description);
   }
+  if (!App_Description) {
+    set_fields.push("?");
+    set_vars.push(App_Description);
+  }
   if (App_Rnumber) {
     set_fields.push("?");
     set_vars.push(App_Rnumber);
@@ -588,6 +592,10 @@ const createTask = (
     set_fields.push("?");
     set_vars.push(Task_description);
   }
+  if (!Task_description) {
+    set_fields.push("?");
+    set_vars.push(Task_description);
+  }
   if (Task_notes) {
     set_fields.push("?");
     set_vars.push(Task_notes);
@@ -665,6 +673,68 @@ const getTasks = (Task_app_Acronym, callback) => {
     }
   );
 };
+
+//=======================================Edit Task================================================
+
+async function editTask(
+  Task_name,
+  Task_description,
+  Task_notes,
+  Task_plan,
+  Task_owner,
+  callback
+) {
+  // String and variables if required
+  var set_fields = [];
+  var set_vars = [];
+
+  if (!Task_description) {
+    set_fields.push("Task_description = ?");
+    set_vars.push(Task_description);
+  }
+  if (Task_description) {
+    set_fields.push("Task_description = ?");
+    set_vars.push(Task_description);
+  }
+  if (Task_notes) {
+    set_fields.push("Task_notes = ?");
+    set_vars.push(Task_notes);
+  }
+  if (!Task_plan) {
+    set_fields.push("Task_plan = ?");
+    set_vars.push(Task_plan);
+  }
+  if (Task_plan) {
+    set_fields.push("Task_plan = ?");
+    set_vars.push(Task_plan);
+  }
+  if (Task_owner) {
+    set_fields.push("Task_owner = ?");
+    set_vars.push(Task_owner);
+  }
+
+  set_vars.push(Task_name);
+
+  // Return if there is nothing to update in the user table
+  if (set_fields.length === 0) {
+    return callback(null);
+  }
+
+  let query = mysql.format(
+    "UPDATE task SET " + set_fields.toString() + " WHERE Task_name = ?",
+    set_vars
+  );
+
+  db.query(query, err => {
+    // Error handling
+    if (err) {
+      console.log("Error encountered when trying to edit task.");
+      return callback(err, false);
+    }
+    console.log("Successfully edited task!");
+    return callback(null, true);
+  });
+}
 
 //=======================================StateOpen_ToDoList================================================
 const stateOpen_ToDoList = (request, response) => {
@@ -783,6 +853,7 @@ module.exports = {
   getPlanColour,
   createTask,
   getTasks,
+  editTask,
   stateOpen_ToDoList,
   stateToDoList_Doing,
   stateDoing_ToDoList,

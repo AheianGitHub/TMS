@@ -9,9 +9,6 @@ import SplitMultiselect from "../Components/SplitMultiselect";
 
 import "../Table.css";
 
-//Plan multiselect, only display those that have same app-acronym
-//task_id, take gettasks.length and
-
 function TaskCreatePage() {
   // Set useNavigate as variable
   const navigate = useNavigate();
@@ -22,12 +19,20 @@ function TaskCreatePage() {
   const [taskCount, setTaskCount] = useState([]);
   const [Task_colour, setTask_colour] = useState();
 
+  var taskCountHolder;
+
+  if (taskCount === undefined) {
+    taskCountHolder = 0;
+  } else {
+    taskCountHolder = taskCount.length;
+  }
+
   let Task_id =
     JSON.parse(sessionStorage.getItem("ApplicationData")).App_Acronym +
     "_" +
     parseInt(
       JSON.parse(sessionStorage.getItem("ApplicationData")).App_Rnumber +
-        taskCount.length +
+        taskCountHolder +
         1
     ).toString();
 
@@ -99,26 +104,6 @@ function TaskCreatePage() {
       });
       return;
     }
-
-    // if (planStartDate < App_startDate || planStartDate > App_endDate) {
-    //   toast.warning(
-    //     "Plan Start Date has to be within App Start & App End Date.",
-    //     {
-    //       hideProgressBar: true
-    //     }
-    //   );
-    //   return;
-    // }
-
-    // if (planEndDate < App_startDate || planEndDate > App_endDate) {
-    //   toast.warning(
-    //     "Plan End Date has to be within App Start & App End Date.",
-    //     {
-    //       hideProgressBar: true
-    //     }
-    //   );
-    //   return;
-    // }
 
     return fetch("/CreateTask", {
       method: "POST",

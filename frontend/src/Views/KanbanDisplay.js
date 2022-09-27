@@ -10,6 +10,7 @@ import StateDone_Doing from "../Components/StateDone_Doing";
 import StateDone_Closed from "../Components/StateDone_Closed";
 
 import CheckGroup from "../Components/CheckGroup";
+import SendMail from "../Components/SendMail";
 
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -222,9 +223,6 @@ function KanbanDisplay() {
         }}
       >
         {pCreate === true && <a href="/TaskCreatePage">Create Task</a>}
-        {/* <a href="/TaskCreatePage">Create Task</a> */}
-        &ensp;
-        {/* <a href="/TaskEditPage">Edit Task</a> */}
       </div>
 
       {/* ===========================KanBan Board====================================================== */}
@@ -257,69 +255,71 @@ function KanbanDisplay() {
           <table style={{ width: "100%" }}>
             <thead></thead>
             <tbody>
-              {taskTableData.map(individualData => {
-                if (individualData.Task_state === "Open") {
-                  return (
-                    <tr key={individualData.Task_name}>
-                      <td
-                        key="uniqueID1"
-                        className="tooltip"
-                        style={{
-                          // borderColor: individualData.Task_colour,
-                          borderWidth: "2px"
-                        }}
-                      >
-                        {pOpen === true && (
-                          <ArrowForwardIcon
-                            // value="check"
-                            // selected={individualData.status}
-                            onClick={() => {
-                              StateOpen_ToDoList(individualData.Task_name);
-                            }}
-                          />
-                        )}
+              {taskTableData &&
+                taskTableData.map(individualData => {
+                  if (individualData.Task_state === "Open") {
+                    return (
+                      <tr key={individualData.Task_name}>
+                        <td
+                          key="uniqueID1"
+                          className="tooltip"
+                          style={{
+                            // borderColor: individualData.Task_colour,
+                            borderWidth: "2px"
+                          }}
+                        >
+                          {pOpen === true && (
+                            <ArrowForwardIcon
+                              // value="check"
+                              // selected={individualData.status}
+                              onClick={() => {
+                                StateOpen_ToDoList(individualData.Task_name);
+                              }}
+                            />
+                          )}
 
-                        {individualData.Task_name}
-                        <span className="tooltiptext">
-                          Task Description: {individualData.Task_description},{" "}
-                          <br></br>
-                          Task Notes: {individualData.Task_notes}, <br></br>
-                          Task ID: {individualData.Task_id}, <br></br>
-                          Task Plan: {individualData.Task_plan}, <br></br>
-                          Task App Acronym: {
-                            individualData.Task_app_Acronym
-                          }, <br></br>
-                          Task State: {individualData.Task_state},<br></br>
-                          Task Creator: {individualData.Task_creator}, <br></br>
-                          Task Owner: {individualData.Task_owner}, <br></br>
-                          Task Created Date:{" "}
-                          {new Date(individualData.Task_createDate)
-                            .toLocaleDateString("pt-br")
-                            .split("/")
-                            .join("-")}
-                          <br></br>
-                        </span>
-                      </td>
-                      <td>
-                        {pOpen === true && (
-                          <a
-                            onClick={() => {
-                              sessionStorage.setItem(
-                                "PlanData",
-                                JSON.stringify(individualData)
-                              );
-                            }}
-                            href="/TaskEditPage"
-                            // className="spaceBetweenButtons"
-                          >
-                            Edit Task
-                          </a>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                }
-              })}
+                          {individualData.Task_name}
+                          <span className="tooltiptext">
+                            Task Description: {individualData.Task_description},{" "}
+                            <br></br>
+                            Task Notes: {individualData.Task_notes}, <br></br>
+                            Task ID: {individualData.Task_id}, <br></br>
+                            Task Plan: {individualData.Task_plan}, <br></br>
+                            Task App Acronym: {
+                              individualData.Task_app_Acronym
+                            }, <br></br>
+                            Task State: {individualData.Task_state},<br></br>
+                            Task Creator: {individualData.Task_creator},{" "}
+                            <br></br>
+                            Task Owner: {individualData.Task_owner}, <br></br>
+                            Task Created Date:{" "}
+                            {new Date(individualData.Task_createDate)
+                              .toLocaleDateString("pt-br")
+                              .split("/")
+                              .join("-")}
+                            <br></br>
+                          </span>
+                        </td>
+                        <td>
+                          {pOpen === true && (
+                            <a
+                              onClick={() => {
+                                sessionStorage.setItem(
+                                  "TaskData",
+                                  JSON.stringify(individualData)
+                                );
+                              }}
+                              href="/TaskEditPage"
+                              // className="spaceBetweenButtons"
+                            >
+                              Edit Task
+                            </a>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  }
+                })}
             </tbody>
           </table>
         </div>
@@ -346,69 +346,71 @@ function KanbanDisplay() {
           <table style={{ width: "100%" }}>
             <thead></thead>
             <tbody>
-              {taskTableData.map(individualData => {
-                if (individualData.Task_state === "To-Do-List") {
-                  return (
-                    <tr key={individualData.Task_name}>
-                      <td
-                        key="uniqueID1"
-                        className="tooltip"
-                        style={{
-                          // borderColor: individualData.Task_colour,
-                          borderWidth: "2px"
-                        }}
-                      >
-                        {pToDoList === true && (
-                          <ArrowForwardIcon
-                            // value="check"
-                            // selected={individualData.status}
-                            onClick={() => {
-                              StateToDoList_Doing(individualData.Task_name);
-                            }}
-                          />
-                        )}
+              {taskTableData &&
+                taskTableData.map(individualData => {
+                  if (individualData.Task_state === "To-Do-List") {
+                    return (
+                      <tr key={individualData.Task_name}>
+                        <td
+                          key="uniqueID1"
+                          className="tooltip"
+                          style={{
+                            // borderColor: individualData.Task_colour,
+                            borderWidth: "2px"
+                          }}
+                        >
+                          {pToDoList === true && (
+                            <ArrowForwardIcon
+                              // value="check"
+                              // selected={individualData.status}
+                              onClick={() => {
+                                StateToDoList_Doing(individualData.Task_name);
+                              }}
+                            />
+                          )}
 
-                        {individualData.Task_name}
-                        <span className="tooltiptext">
-                          Task Description: {individualData.Task_description},{" "}
-                          <br></br>
-                          Task Notes: {individualData.Task_notes}, <br></br>
-                          Task ID: {individualData.Task_id}, <br></br>
-                          Task Plan: {individualData.Task_plan}, <br></br>
-                          Task App Acronym: {
-                            individualData.Task_app_Acronym
-                          }, <br></br>
-                          Task State: {individualData.Task_state},<br></br>
-                          Task Creator: {individualData.Task_creator}, <br></br>
-                          Task Owner: {individualData.Task_owner}, <br></br>
-                          Task Created Date:{" "}
-                          {new Date(individualData.Task_createDate)
-                            .toLocaleDateString("pt-br")
-                            .split("/")
-                            .join("-")}
-                          <br></br>
-                        </span>
-                      </td>
-                      <td>
-                        {pToDoList === true && (
-                          <a
-                            onClick={() => {
-                              sessionStorage.setItem(
-                                "PlanData",
-                                JSON.stringify(individualData)
-                              );
-                            }}
-                            href="/TaskEditPage"
-                            // className="spaceBetweenButtons"
-                          >
-                            Edit Task
-                          </a>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                }
-              })}
+                          {individualData.Task_name}
+                          <span className="tooltiptext">
+                            Task Description: {individualData.Task_description},{" "}
+                            <br></br>
+                            Task Notes: {individualData.Task_notes}, <br></br>
+                            Task ID: {individualData.Task_id}, <br></br>
+                            Task Plan: {individualData.Task_plan}, <br></br>
+                            Task App Acronym: {
+                              individualData.Task_app_Acronym
+                            }, <br></br>
+                            Task State: {individualData.Task_state},<br></br>
+                            Task Creator: {individualData.Task_creator},{" "}
+                            <br></br>
+                            Task Owner: {individualData.Task_owner}, <br></br>
+                            Task Created Date:{" "}
+                            {new Date(individualData.Task_createDate)
+                              .toLocaleDateString("pt-br")
+                              .split("/")
+                              .join("-")}
+                            <br></br>
+                          </span>
+                        </td>
+                        <td>
+                          {pToDoList === true && (
+                            <a
+                              onClick={() => {
+                                sessionStorage.setItem(
+                                  "TaskData",
+                                  JSON.stringify(individualData)
+                                );
+                              }}
+                              href="/TaskEditPage"
+                              // className="spaceBetweenButtons"
+                            >
+                              Edit Task
+                            </a>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  }
+                })}
             </tbody>
           </table>
         </div>
@@ -435,78 +437,84 @@ function KanbanDisplay() {
           <table style={{ width: "100%" }}>
             <thead></thead>
             <tbody>
-              {taskTableData.map(individualData => {
-                if (individualData.Task_state === "Doing") {
-                  return (
-                    <tr key={individualData.Task_name}>
-                      <td
-                        key="uniqueID1"
-                        className="tooltip"
-                        style={{
-                          // borderColor: individualData.Task_colour,
-                          borderWidth: "2px"
-                        }}
-                      >
-                        {pDoing === true && (
-                          <ArrowForwardIcon
-                            // value="check"
-                            // selected={individualData.status}
-                            onClick={() => {
-                              StateDoing_Done(individualData.Task_name);
-                            }}
-                          />
-                        )}
-                        ===
-                        {pDoing === true && (
-                          <ArrowBackIcon
-                            // value="check"
-                            // selected={individualData.status}
-                            onClick={() => {
-                              StateDoing_ToDoList(individualData.Task_name);
-                            }}
-                          />
-                        )}
-                        {individualData.Task_name}
-                        <span className="tooltiptext">
-                          Task Description: {individualData.Task_description},{" "}
-                          <br></br>
-                          Task Notes: {individualData.Task_notes}, <br></br>
-                          Task ID: {individualData.Task_id}, <br></br>
-                          Task Plan: {individualData.Task_plan}, <br></br>
-                          Task App Acronym: {
-                            individualData.Task_app_Acronym
-                          }, <br></br>
-                          Task State: {individualData.Task_state},<br></br>
-                          Task Creator: {individualData.Task_creator}, <br></br>
-                          Task Owner: {individualData.Task_owner}, <br></br>
-                          Task Created Date:{" "}
-                          {new Date(individualData.Task_createDate)
-                            .toLocaleDateString("pt-br")
-                            .split("/")
-                            .join("-")}
-                          <br></br>
-                        </span>
-                      </td>
-                      <td>
-                        {pDoing === true && (
-                          <a
-                            onClick={() => {
-                              sessionStorage.setItem(
-                                "PlanData",
-                                JSON.stringify(individualData)
-                              );
-                            }}
-                            href="/TaskEditPage"
-                            // className="spaceBetweenButtons"
-                          >
-                            Edit Task
-                          </a>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                }
-              })}
+              {taskTableData &&
+                taskTableData.map(individualData => {
+                  if (individualData.Task_state === "Doing") {
+                    return (
+                      <tr key={individualData.Task_name}>
+                        <td
+                          key="uniqueID1"
+                          className="tooltip"
+                          style={{
+                            // borderColor: individualData.Task_colour,
+                            borderWidth: "2px"
+                          }}
+                        >
+                          {pDoing === true && (
+                            <ArrowForwardIcon
+                              // value="check"
+                              // selected={individualData.status}
+                              onClick={() => {
+                                StateDoing_Done(individualData.Task_name);
+                                SendMail(
+                                  token.username,
+                                  individualData.Task_name
+                                );
+                              }}
+                            />
+                          )}
+                          ===
+                          {pDoing === true && (
+                            <ArrowBackIcon
+                              // value="check"
+                              // selected={individualData.status}
+                              onClick={() => {
+                                StateDoing_ToDoList(individualData.Task_name);
+                              }}
+                            />
+                          )}
+                          {individualData.Task_name}
+                          <span className="tooltiptext">
+                            Task Description: {individualData.Task_description},{" "}
+                            <br></br>
+                            Task Notes: {individualData.Task_notes}, <br></br>
+                            Task ID: {individualData.Task_id}, <br></br>
+                            Task Plan: {individualData.Task_plan}, <br></br>
+                            Task App Acronym: {
+                              individualData.Task_app_Acronym
+                            }, <br></br>
+                            Task State: {individualData.Task_state},<br></br>
+                            Task Creator: {individualData.Task_creator},{" "}
+                            <br></br>
+                            Task Owner: {individualData.Task_owner}, <br></br>
+                            Task Created Date:{" "}
+                            {new Date(individualData.Task_createDate)
+                              .toLocaleDateString("pt-br")
+                              .split("/")
+                              .join("-")}
+                            <br></br>
+                          </span>
+                        </td>
+                        <td>
+                          {pDoing === true && (
+                            <a
+                              onClick={() => {
+                                sessionStorage.setItem(
+                                  "TaskData",
+                                  JSON.stringify(individualData)
+                                );
+                              }}
+                              href="/TaskEditPage"
+                              // className="spaceBetweenButtons"
+                            >
+                              Edit Task
+                            </a>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  }
+                })}
             </tbody>
           </table>
         </div>
@@ -533,78 +541,80 @@ function KanbanDisplay() {
           <table style={{ width: "100%" }}>
             <thead></thead>
             <tbody>
-              {taskTableData.map(individualData => {
-                if (individualData.Task_state === "Done") {
-                  return (
-                    <tr key={individualData.Task_name}>
-                      <td
-                        key="uniqueID1"
-                        className="tooltip"
-                        style={{
-                          // borderColor: individualData.Task_colour,
-                          borderWidth: "2px"
-                        }}
-                      >
-                        {pDone === true && (
-                          <ArrowForwardIcon
-                            // value="check"
-                            // selected={individualData.status}
-                            onClick={() => {
-                              StateDone_Closed(individualData.Task_name);
-                            }}
-                          />
-                        )}
-                        ===
-                        {pDone === true && (
-                          <ArrowBackIcon
-                            // value="check"
-                            // selected={individualData.status}
-                            onClick={() => {
-                              StateDone_Doing(individualData.Task_name);
-                            }}
-                          />
-                        )}
-                        {individualData.Task_name}
-                        <span className="tooltiptext">
-                          Task Description: {individualData.Task_description},{" "}
-                          <br></br>
-                          Task Notes: {individualData.Task_notes}, <br></br>
-                          Task ID: {individualData.Task_id}, <br></br>
-                          Task Plan: {individualData.Task_plan}, <br></br>
-                          Task App Acronym: {
-                            individualData.Task_app_Acronym
-                          }, <br></br>
-                          Task State: {individualData.Task_state},<br></br>
-                          Task Creator: {individualData.Task_creator}, <br></br>
-                          Task Owner: {individualData.Task_owner}, <br></br>
-                          Task Created Date:{" "}
-                          {new Date(individualData.Task_createDate)
-                            .toLocaleDateString("pt-br")
-                            .split("/")
-                            .join("-")}
-                          <br></br>
-                        </span>
-                      </td>
-                      <td>
-                        {pDone === true && (
-                          <a
-                            onClick={() => {
-                              sessionStorage.setItem(
-                                "PlanData",
-                                JSON.stringify(individualData)
-                              );
-                            }}
-                            href="/TaskEditPage"
-                            // className="spaceBetweenButtons"
-                          >
-                            Edit Task
-                          </a>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                }
-              })}
+              {taskTableData &&
+                taskTableData.map(individualData => {
+                  if (individualData.Task_state === "Done") {
+                    return (
+                      <tr key={individualData.Task_name}>
+                        <td
+                          key="uniqueID1"
+                          className="tooltip"
+                          style={{
+                            // borderColor: individualData.Task_colour,
+                            borderWidth: "2px"
+                          }}
+                        >
+                          {pDone === true && (
+                            <ArrowForwardIcon
+                              // value="check"
+                              // selected={individualData.status}
+                              onClick={() => {
+                                StateDone_Closed(individualData.Task_name);
+                              }}
+                            />
+                          )}
+                          ===
+                          {pDone === true && (
+                            <ArrowBackIcon
+                              // value="check"
+                              // selected={individualData.status}
+                              onClick={() => {
+                                StateDone_Doing(individualData.Task_name);
+                              }}
+                            />
+                          )}
+                          {individualData.Task_name}
+                          <span className="tooltiptext">
+                            Task Description: {individualData.Task_description},{" "}
+                            <br></br>
+                            Task Notes: {individualData.Task_notes}, <br></br>
+                            Task ID: {individualData.Task_id}, <br></br>
+                            Task Plan: {individualData.Task_plan}, <br></br>
+                            Task App Acronym: {
+                              individualData.Task_app_Acronym
+                            }, <br></br>
+                            Task State: {individualData.Task_state},<br></br>
+                            Task Creator: {individualData.Task_creator},{" "}
+                            <br></br>
+                            Task Owner: {individualData.Task_owner}, <br></br>
+                            Task Created Date:{" "}
+                            {new Date(individualData.Task_createDate)
+                              .toLocaleDateString("pt-br")
+                              .split("/")
+                              .join("-")}
+                            <br></br>
+                          </span>
+                        </td>
+                        <td>
+                          {pDone === true && (
+                            <a
+                              onClick={() => {
+                                sessionStorage.setItem(
+                                  "TaskData",
+                                  JSON.stringify(individualData)
+                                );
+                              }}
+                              href="/TaskEditPage"
+                              // className="spaceBetweenButtons"
+                            >
+                              Edit Task
+                            </a>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  }
+                })}
             </tbody>
           </table>
         </div>
@@ -631,57 +641,45 @@ function KanbanDisplay() {
           <table style={{ width: "100%" }}>
             <thead></thead>
             <tbody>
-              {taskTableData.map(individualData => {
-                if (individualData.Task_state === "Closed") {
-                  return (
-                    <tr key={individualData.Task_name}>
-                      <td
-                        key="uniqueID1"
-                        className="tooltip"
-                        style={{
-                          // borderColor: individualData.Task_colour,
-                          borderWidth: "2px"
-                        }}
-                      >
-                        {individualData.Task_name}
-                        <span className="tooltiptext">
-                          Task Description: {individualData.Task_description},{" "}
-                          <br></br>
-                          Task Notes: {individualData.Task_notes}, <br></br>
-                          Task ID: {individualData.Task_id}, <br></br>
-                          Task Plan: {individualData.Task_plan}, <br></br>
-                          Task App Acronym: {
-                            individualData.Task_app_Acronym
-                          }, <br></br>
-                          Task State: {individualData.Task_state},<br></br>
-                          Task Creator: {individualData.Task_creator}, <br></br>
-                          Task Owner: {individualData.Task_owner}, <br></br>
-                          Task Created Date:{" "}
-                          {new Date(individualData.Task_createDate)
-                            .toLocaleDateString("pt-br")
-                            .split("/")
-                            .join("-")}
-                          <br></br>
-                        </span>
-                      </td>
-                      {/* <td>
-                        <a
-                          onClick={() => {
-                            sessionStorage.setItem(
-                              "PlanData",
-                              JSON.stringify(individualData)
-                            );
+              {taskTableData &&
+                taskTableData.map(individualData => {
+                  if (individualData.Task_state === "Closed") {
+                    return (
+                      <tr key={individualData.Task_name}>
+                        <td
+                          key="uniqueID1"
+                          className="tooltip"
+                          style={{
+                            // borderColor: individualData.Task_colour,
+                            borderWidth: "2px"
                           }}
-                          href="/TaskEditPage"
-                          // className="spaceBetweenButtons"
                         >
-                          Edit Task
-                        </a>
-                      </td> */}
-                    </tr>
-                  );
-                }
-              })}
+                          {individualData.Task_name}
+                          <span className="tooltiptext">
+                            Task Description: {individualData.Task_description},{" "}
+                            <br></br>
+                            Task Notes: {individualData.Task_notes}, <br></br>
+                            Task ID: {individualData.Task_id}, <br></br>
+                            Task Plan: {individualData.Task_plan}, <br></br>
+                            Task App Acronym: {
+                              individualData.Task_app_Acronym
+                            }, <br></br>
+                            Task State: {individualData.Task_state},<br></br>
+                            Task Creator: {individualData.Task_creator},{" "}
+                            <br></br>
+                            Task Owner: {individualData.Task_owner}, <br></br>
+                            Task Created Date:{" "}
+                            {new Date(individualData.Task_createDate)
+                              .toLocaleDateString("pt-br")
+                              .split("/")
+                              .join("-")}
+                            <br></br>
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  }
+                })}
             </tbody>
           </table>
         </div>

@@ -1,4 +1,7 @@
 function SplitMultiselect(selectedGroups, column_name) {
+  // console.log(typeof selectedGroups);
+  // console.log(selectedGroups);
+
   if (!selectedGroups) {
     return;
   }
@@ -15,7 +18,7 @@ function SplitMultiselect(selectedGroups, column_name) {
         ? concatGroups + "," + item[column_name]
         : concatGroups + item[column_name];
   });
-  // console.log("Completed groupname string to send fetch", concatGroups);
+  // console.log(concatGroups);
   return concatGroups;
 }
 
