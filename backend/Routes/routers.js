@@ -72,6 +72,7 @@ routers.post("/StateDoing_ToDoList", userAccounts.stateDoing_ToDoList);
 routers.post("/StateDoing_Done", userAccounts.stateDoing_Done);
 routers.post("/StateDone_Doing", userAccounts.stateDone_Doing);
 routers.post("/StateDone_Closed", userAccounts.stateDone_Closed);
+routers.post("/StateAuditTrail", userAccounts.stateAuditTrail);
 
 routers.post("/SendMail", sendMail);
 

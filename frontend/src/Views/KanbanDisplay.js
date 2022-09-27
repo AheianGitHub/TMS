@@ -8,6 +8,7 @@ import StateDoing_ToDoList from "../Components/StateDoing_ToDoList";
 import StateDoing_Done from "../Components/StateDoing_Done";
 import StateDone_Doing from "../Components/StateDone_Doing";
 import StateDone_Closed from "../Components/StateDone_Closed";
+import StateAuditTrail from "../Components/StateAuditTrail";
 
 import CheckGroup from "../Components/CheckGroup";
 import SendMail from "../Components/SendMail";
@@ -47,6 +48,15 @@ function KanbanDisplay() {
   let App_permit_Done = JSON.parse(
     sessionStorage.getItem("ApplicationData")
   ).App_permit_Done;
+
+  let Task_currentDate = new Date();
+
+  let removeFrontChar = Task_currentDate.toString().slice(4);
+  // console.log("Removing the day", removeFrontChar);
+
+  let removeBackChar = removeFrontChar
+    .toString()
+    .slice(0, removeFrontChar.length - 35);
 
   const token = JSON.parse(sessionStorage.getItem("token")).token;
 
@@ -257,6 +267,7 @@ function KanbanDisplay() {
             <tbody>
               {taskTableData &&
                 taskTableData.map(individualData => {
+                  // console.log(individualData);
                   if (individualData.Task_state === "Open") {
                     return (
                       <tr key={individualData.Task_name}>
@@ -274,6 +285,19 @@ function KanbanDisplay() {
                               // selected={individualData.status}
                               onClick={() => {
                                 StateOpen_ToDoList(individualData.Task_name);
+                                individualData.Task_notes =
+                                  token.username +
+                                  " changed Task State: Open -> To-Do-List (Owner: " +
+                                  token.username +
+                                  ", Current state: To-Do-List, Timestamp: " +
+                                  removeBackChar +
+                                  ")." +
+                                  "\n \n" +
+                                  individualData.Task_notes;
+                                StateAuditTrail(
+                                  individualData.Task_name,
+                                  individualData.Task_notes
+                                );
                               }}
                             />
                           )}
@@ -365,6 +389,19 @@ function KanbanDisplay() {
                               // selected={individualData.status}
                               onClick={() => {
                                 StateToDoList_Doing(individualData.Task_name);
+                                individualData.Task_notes =
+                                  token.username +
+                                  " changed Task State: To-Do-List -> Doing (Owner: " +
+                                  token.username +
+                                  ", Current state: Doing, Timestamp: " +
+                                  removeBackChar +
+                                  ")." +
+                                  "\n \n" +
+                                  individualData.Task_notes;
+                                StateAuditTrail(
+                                  individualData.Task_name,
+                                  individualData.Task_notes
+                                );
                               }}
                             />
                           )}
@@ -460,6 +497,19 @@ function KanbanDisplay() {
                                   token.username,
                                   individualData.Task_name
                                 );
+                                individualData.Task_notes =
+                                  token.username +
+                                  " changed Task State: Doing -> Done (Owner: " +
+                                  token.username +
+                                  ", Current state: Done, Timestamp: " +
+                                  removeBackChar +
+                                  ")." +
+                                  "\n \n" +
+                                  individualData.Task_notes;
+                                StateAuditTrail(
+                                  individualData.Task_name,
+                                  individualData.Task_notes
+                                );
                               }}
                             />
                           )}
@@ -470,6 +520,19 @@ function KanbanDisplay() {
                               // selected={individualData.status}
                               onClick={() => {
                                 StateDoing_ToDoList(individualData.Task_name);
+                                individualData.Task_notes =
+                                  token.username +
+                                  " changed Task State: Doing -> To-Do-List (Owner: " +
+                                  token.username +
+                                  ", Current state: To-Do-List, Timestamp: " +
+                                  removeBackChar +
+                                  ")." +
+                                  "\n \n" +
+                                  individualData.Task_notes;
+                                StateAuditTrail(
+                                  individualData.Task_name,
+                                  individualData.Task_notes
+                                );
                               }}
                             />
                           )}
@@ -560,6 +623,19 @@ function KanbanDisplay() {
                               // selected={individualData.status}
                               onClick={() => {
                                 StateDone_Closed(individualData.Task_name);
+                                individualData.Task_notes =
+                                  token.username +
+                                  " changed Task State: Done -> Closed (Owner: " +
+                                  token.username +
+                                  ", Current state: Closed, Timestamp: " +
+                                  removeBackChar +
+                                  ")." +
+                                  "\n \n" +
+                                  individualData.Task_notes;
+                                StateAuditTrail(
+                                  individualData.Task_name,
+                                  individualData.Task_notes
+                                );
                               }}
                             />
                           )}
@@ -570,6 +646,19 @@ function KanbanDisplay() {
                               // selected={individualData.status}
                               onClick={() => {
                                 StateDone_Doing(individualData.Task_name);
+                                individualData.Task_notes =
+                                  token.username +
+                                  " changed Task State: Done -> Doing (Owner: " +
+                                  token.username +
+                                  ", Current state: Doing, Timestamp: " +
+                                  removeBackChar +
+                                  ")." +
+                                  "\n \n" +
+                                  individualData.Task_notes;
+                                StateAuditTrail(
+                                  individualData.Task_name,
+                                  individualData.Task_notes
+                                );
                               }}
                             />
                           )}

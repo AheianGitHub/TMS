@@ -832,6 +832,22 @@ const stateDone_Closed = (request, response) => {
   );
 };
 
+//=======================================StateOpen_ToDoList================================================
+const stateAuditTrail = (request, response) => {
+  //request -> input, res -> output
+  db.query(
+    `UPDATE task set Task_notes = ? WHERE Task_name = ?`,
+    [request.body.Task_notes, request.body.Task_name],
+    (err, results) => {
+      if (err) {
+        throw err;
+      } else {
+        response.send({ result: true });
+      }
+    }
+  );
+};
+
 module.exports = {
   getOneUser,
   verifyUser,
@@ -859,5 +875,6 @@ module.exports = {
   stateDoing_ToDoList,
   stateDoing_Done,
   stateDone_Doing,
-  stateDone_Closed
+  stateDone_Closed,
+  stateAuditTrail
 };

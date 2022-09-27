@@ -9,7 +9,7 @@ import SplitMultiselect from "../Components/SplitMultiselect";
 
 import "../Table.css";
 
-function TaskEditPage() {
+function ViewTaskPage() {
   let Task_name = JSON.parse(sessionStorage.getItem("TaskData")).Task_name;
 
   let Task_description = JSON.parse(
@@ -87,7 +87,7 @@ function TaskEditPage() {
       setTaskPlan([{ Plan_MVP_name: Task_plan }]);
     }
     GetPlanTaskCreate(setPlanOptions, Task_app_Acronym);
-    navigate("/TaskEditPage");
+    navigate("/ViewTaskPage");
 
     const InitPage = async () => {
       // Setting all permissions
@@ -298,4 +298,4 @@ function TaskEditPage() {
   );
 }
 
-export default TaskEditPage;
+export default ViewTaskPage;
