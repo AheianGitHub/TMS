@@ -721,6 +721,7 @@ const getTasks = (Task_app_Acronym, callback) => {
 
 const getTask = (Task_app_Acronym, Task_name, callback) => {
   //request -> input, res -> output
+  console.log(Task_name);
   db.query(
     `select Task_name, Task_description, Task_notes, Task_id, Task_plan, Task_app_Acronym, Task_state, Task_creator, Task_owner, Task_createDate from task where Task_app_Acronym = "${Task_app_Acronym}" AND Task_name = "${Task_name}"`,
     (err, results) => {

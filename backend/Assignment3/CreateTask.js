@@ -49,7 +49,7 @@ exports.CreateTask = async (request, response) => {
       }
 
       //duplicated task name
-      User.getTask(Task_name, (err, taskResult) => {
+      User.getTask(Task_app_Acronym, Task_name, (err, taskResult) => {
         if (taskResult) {
           return response.status(400).send({ code: 400 });
         }
