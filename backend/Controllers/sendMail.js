@@ -1,10 +1,11 @@
 const nodemailer = require("nodemailer");
-var User = require("../Models/userAccounts");
 
 // async..await is not allowed in global scope, must use a wrapper
 module.exports = async (request, response) => {
+  // console.log(request);
   let mailData = request.body;
 
+  // console.log(mailData);
   let username = mailData.username;
   let task_name = mailData.Task_name;
 
@@ -33,8 +34,10 @@ module.exports = async (request, response) => {
   });
 
   if (info) {
-    response.sendStatus(200);
+    // response.sendStatus(200);
+    return true;
   } else {
-    response.sendStatus(400);
+    // response.sendStatus(400);
+    return false;
   }
 };

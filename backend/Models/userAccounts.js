@@ -274,6 +274,27 @@ const getAllApplications = callback => {
   });
 };
 
+const getAllApplication = (Acronym, callback) => {
+  // Query
+  let query = mysql.format(
+    "select App_Acronym, App_Description, App_Rnumber, App_startDate, App_endDate, App_permit_Open, App_permit_toDoList, App_permit_Doing, App_permit_Done, App_permit_Create from application where App_Acronym =  ?",
+    [Acronym]
+  );
+
+  // Querying
+  db.query(query, (error, result) => {
+    if (error) {
+      throw error;
+    } else {
+      if (result) {
+        callback(null, result);
+      } else if (!result) {
+        callback(null, false);
+      }
+    }
+  });
+};
+
 //=======================================Create Application================================================
 
 const createApplication = (
@@ -439,6 +460,28 @@ const getAllPlans = callback => {
   // Query
   let query = mysql.format(
     "select Plan_MVP_name, Plan_startDate, Plan_endDate, Plan_app_Acronym, Plan_Colour from plan"
+  );
+
+  // Querying
+  db.query(query, (error, result) => {
+    if (error) {
+      throw error;
+    } else {
+      if (result) {
+        callback(null, result);
+      } else if (!result) {
+        callback(null, false);
+      }
+    }
+  });
+};
+
+//===================================Get Plan=============================================
+const getPlan = (Plan_MVP_name, callback) => {
+  // Query
+  let query = mysql.format(
+    "select Plan_MVP_name, Plan_startDate, Plan_endDate, Plan_app_Acronym, Plan_Colour from plan where Plan_MVP_name = ?",
+    [Plan_MVP_name]
   );
 
   // Querying
@@ -663,11 +706,49 @@ const getTasks = (Task_app_Acronym, callback) => {
     (err, results) => {
       if (err) {
         throw err;
+      }
+      if (results) {
+        //removing for a3
+        // if (results.length > 0)
+        // console.log(results);
+        callback({ result: results });
+      } else {
+        callback({ message: null });
+      }
+    }
+  );
+};
+
+const getTask = (Task_app_Acronym, Task_name, callback) => {
+  //request -> input, res -> output
+  db.query(
+    `select Task_name, Task_description, Task_notes, Task_id, Task_plan, Task_app_Acronym, Task_state, Task_creator, Task_owner, Task_createDate from task where Task_app_Acronym = "${Task_app_Acronym}" AND Task_name = "${Task_name}"`,
+    (err, results) => {
+      if (err) {
+        throw err;
       } else {
         if (results.length > 0) {
-          callback({ result: results });
+          callback(null, results);
         } else {
-          callback({ message: null });
+          callback(null, false);
+        }
+      }
+    }
+  );
+};
+
+const getTaskByState = (Task_app_Acronym, Task_state, callback) => {
+  //request -> input, res -> output
+  db.query(
+    `select Task_name, Task_description, Task_notes, Task_id, Task_plan, Task_app_Acronym, Task_state, Task_creator, Task_owner, Task_createDate from task where Task_app_Acronym = "${Task_app_Acronym}" AND Task_state = "${Task_state}"`,
+    (err, results) => {
+      if (err) {
+        throw err;
+      } else {
+        if (results.length > 0) {
+          callback(null, results);
+        } else {
+          callback(null, false);
         }
       }
     }
@@ -800,6 +881,26 @@ const stateDoing_Done = (request, response) => {
   );
 };
 
+const PromoteTask2Done = (Task_name, callback) => {
+  db.query(
+    `UPDATE task set Task_state = "Done" WHERE Task_name = "${Task_name}"`,
+    (err, results) => {
+      if (err) {
+        return callback(err, false);
+      } else {
+        return callback(null, true);
+      }
+
+      // else {
+      //   if (results.length > 0) {
+      //     callback(null, results);
+      //   } else {
+      //     callback(null, false);
+      //   }
+    }
+  );
+};
+
 //=======================================StateDone_Doing================================================
 const stateDone_Doing = (request, response) => {
   //request -> input, res -> output
@@ -860,20 +961,25 @@ module.exports = {
   createUser,
   editUser,
   getAllApplications,
+  getAllApplication,
   createApplication,
   editApplication,
   getAllPlans,
+  getPlan,
   createPlan,
   editPlan,
   getPlanTaskCreate,
   getPlanColour,
   createTask,
   getTasks,
+  getTask,
+  getTaskByState,
   editTask,
   stateOpen_ToDoList,
   stateToDoList_Doing,
   stateDoing_ToDoList,
   stateDoing_Done,
+  PromoteTask2Done,
   stateDone_Doing,
   stateDone_Closed,
   stateAuditTrail

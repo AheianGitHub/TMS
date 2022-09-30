@@ -1,11 +1,9 @@
 //==================================Declarations=====================================================
 var express = require("express");
-
-var routers = express.Router();
 var loginControl = require("../Controllers/loginControl");
 var CheckGroup = require("../Controllers/checkGroup");
-
 var getUserData = require("../Controllers/getUserData");
+
 const editProfile = require("../Controllers/editProfile");
 
 const createGroup = require("../Controllers/createGroup");
@@ -31,9 +29,20 @@ const editTask = require("../Controllers/editTask");
 
 const sendMail = require("../Controllers/sendMail");
 
+const CreateTask = require("../Assignment3/CreateTask");
+const GetTaskByState = require("../Assignment3/GetTaskByState");
+const PromoteTask2Done = require("../Assignment3/PromoteTask2Done");
+
+// Activate router
+var routers = express.Router();
 //===================================================================================================
 routers.use((req, res, next) => {
   res.locals.currentUser = req.user;
+  try {
+    decodeURIComponent(req.path);
+  } catch (e) {
+    return response.status(400).send({ code: 400 });
+  }
   next();
 });
 
@@ -75,5 +84,13 @@ routers.post("/StateDone_Closed", userAccounts.stateDone_Closed);
 routers.post("/StateAuditTrail", userAccounts.stateAuditTrail);
 
 routers.post("/SendMail", sendMail);
+
+routers.post("/api/CreateTask", CreateTask.CreateTask);
+routers.post("/api/GetTaskByState", GetTaskByState.GetTaskByState);
+routers.post("/api/PromoteTask2Done", PromoteTask2Done.PromoteTask2Done);
+
+routers.post("/api/*", (request, response) => {
+  response.status(400).send({ code: 400 });
+});
 
 module.exports = routers;
